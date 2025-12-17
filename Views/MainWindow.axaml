@@ -1,0 +1,79 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:MealPrepHelper.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+        x:Class="MealPrepHelper.Views.MainWindow"
+        Title="Meal Prep Helper"
+        RequestedThemeVariant="Light"> <Grid RowDefinitions="Auto, Auto, *" Margin="20">
+        
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="0" Margin="0,0,0,20">
+            <Button Content="přehled" 
+                    Background="LightGreen" 
+                    Foreground="Black"
+                    CornerRadius="10,0,0,10"
+                    Padding="20,10"/>
+            
+            <Button Content="kalendář" 
+                    Background="Transparent" 
+                    BorderBrush="Black"
+                    BorderThickness="1"
+                    Foreground="Black"
+                    CornerRadius="0,10,10,0"
+                    Padding="20,10"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Spacing="15" Margin="0,0,0,20">
+            <Button Content="po" Background="LightGreen" Foreground="Black"/>
+            <Button Content="ut" Background="Transparent"/>
+            <Button Content="str" Background="Transparent"/>
+            <Button Content="ct" Background="Transparent"/>
+            <Button Content="pa" Background="Transparent"/>
+            <Button Content="so" Background="Transparent"/>
+            <Button Content="ne" Background="Transparent"/>
+        </StackPanel>
+
+        <Grid Grid.Row="2" ColumnDefinitions="*, 20, *">
+            
+            <Border Grid.Column="0" Background="#F0F0F0" CornerRadius="10" Padding="15">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="Jídelníček" FontWeight="Bold" FontSize="18"/>
+                    <CheckBox Content="Snídaně (Ovesná kaše)"/>
+                    <CheckBox Content="Svačina (Jablko)"/>
+                    <CheckBox Content="Oběd (Kuře s rýží)"/>
+                    <CheckBox Content="Svačina (Protein)"/>
+                    <CheckBox Content="Večeře (Salát)"/>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="2" BorderBrush="Black" BorderThickness="1" CornerRadius="10" Padding="15">
+                <Grid RowDefinitions="Auto, *">
+                    <TextBlock Grid.Row="0" Text="Denní Makra" HorizontalAlignment="Center" FontWeight="Bold" Margin="0,0,0,10"/>
+                    <UniformGrid Grid.Row="1" Columns="2" Rows="2">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="Sacharidy" HorizontalAlignment="Center"/>
+                            <Ellipse Width="50" Height="50" Stroke="Black" StrokeThickness="2"/>
+                            <TextBlock Text="x / y" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="Bílkoviny" HorizontalAlignment="Center"/>
+                            <Ellipse Width="50" Height="50" Stroke="Black" StrokeThickness="2"/>
+                            <TextBlock Text="x / y" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="Tuky" HorizontalAlignment="Center"/>
+                            <Ellipse Width="50" Height="50" Stroke="Black" StrokeThickness="2"/>
+                            <TextBlock Text="x / y" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="Vláknina" HorizontalAlignment="Center"/>
+                            <Ellipse Width="50" Height="50" Stroke="Black" StrokeThickness="2"/>
+                            <TextBlock Text="x / y" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </UniformGrid>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
