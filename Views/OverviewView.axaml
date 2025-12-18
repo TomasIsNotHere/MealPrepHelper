@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="MealPrepHelper.Views.OverviewView">
+
+    <Grid ColumnDefinitions="*, 25, 300">
+         <Border Grid.Column="0" Background="White" CornerRadius="15" Padding="20" BoxShadow="0 4 10 0 #20000000"> 
+            <StackPanel Spacing="15">
+                <TextBlock Text="Dnešní jídelníček" FontWeight="Bold" FontSize="20" Foreground="#333"/>
+                <StackPanel Spacing="10">
+                    <CheckBox Content="Snídaně (Ovesná kaše)" IsChecked="True"/>
+                    <CheckBox Content="Svačina (Jablko)"/>
+                    <CheckBox Content="Oběd (Kuře s rýží)"/>
+                    <CheckBox Content="Svačina (Protein)"/>
+                    <CheckBox Content="Večeře (Salát)"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Column="2" Background="White" CornerRadius="15" Padding="20" BoxShadow="0 4 10 0 #20000000">
+            <TextBlock Text="Tady budou grafy" HorizontalAlignment="Center"/>
+            </Border>
+    </Grid>
+</UserControl>

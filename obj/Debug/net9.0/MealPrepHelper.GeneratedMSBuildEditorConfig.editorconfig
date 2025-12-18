@@ -24,5 +24,11 @@ build_property.EnableCodeStyleSeverity =
 [/Users/tomas/Documents/C\#/Avalonia/MealPrepHelper/App.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
+[/Users/tomas/Documents/C\#/Avalonia/MealPrepHelper/Views/CalendarView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
 [/Users/tomas/Documents/C\#/Avalonia/MealPrepHelper/Views/MainWindow.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/Users/tomas/Documents/C\#/Avalonia/MealPrepHelper/Views/OverviewView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
