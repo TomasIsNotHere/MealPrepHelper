@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MealPrepHelper.ViewModels"
+             x:Class="MealPrepHelper.Views.LoginView"
+             x:DataType="vm:LoginViewModel">
+
+    <Border Background="#F0F0F0" Padding="40" CornerRadius="10"
+            HorizontalAlignment="Center" VerticalAlignment="Center"
+            BoxShadow="0 0 10 0 LightGray">
+        
+        <StackPanel Width="300" Spacing="15">
+            <TextBlock Text="Vítejte v MealPrep" 
+                       FontSize="24" FontWeight="Bold" 
+                       HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Uživatelské jméno"/>
+            <TextBox Text="{Binding Username}" Watermark="Např. Admin"/>
+
+            <TextBlock Text="Heslo"/>
+            <TextBox Text="{Binding Password}" Watermark="Heslo" PasswordChar="*"/>
+
+            <TextBlock Text="{Binding ErrorMessage}" 
+                       Foreground="Red" FontSize="12"
+                       IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+
+            <Button Content="Přihlásit se" 
+                    Command="{Binding LoginCommand}"
+                    HorizontalAlignment="Stretch" 
+                    HorizontalContentAlignment="Center"
+                    Background="Green" Foreground="White" Margin="0,10,0,0"/>
+        </StackPanel>
+    </Border>
+</UserControl>
