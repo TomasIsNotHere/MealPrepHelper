@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
 using MealPrepHelper.Data;
 using MealPrepHelper.Models;
+using System.Windows.Input;
 
 namespace MealPrepHelper.ViewModels
 {
@@ -35,6 +36,7 @@ namespace MealPrepHelper.ViewModels
 
         public ObservableCollection<CalendarDayViewModel> WeekDays { get; } = new();
         public ObservableCollection<PlanItem> TodayMeals { get; } = new();
+        public ICommand UpdateMealStatusCommand { get; }
 
         // === HODNOTY (Values) ===
         private int _currentCalories; public int CurrentCalories { get => _currentCalories; set => this.RaiseAndSetIfChanged(ref _currentCalories, value); }
@@ -72,6 +74,31 @@ namespace MealPrepHelper.ViewModels
         public ReactiveCommand<Unit, Unit> PrevWeekCommand { get; }
         public ReactiveCommand<CalendarDayViewModel, Unit> SelectDayCommand { get; }
 
+// === NOVÉ: DETAILNÍ POPUP ===
+        
+        private bool _isInfoVisible;
+        public bool IsInfoVisible 
+        { 
+            get => _isInfoVisible; 
+            set => this.RaiseAndSetIfChanged(ref _isInfoVisible, value); 
+        }
+
+        private PlanItem? _selectedPlanItem;
+        public PlanItem? SelectedPlanItem 
+        { 
+            get => _selectedPlanItem; 
+            set => this.RaiseAndSetIfChanged(ref _selectedPlanItem, value); 
+        }
+
+        // === NOVÉ PŘÍKAZY ===
+        public ReactiveCommand<PlanItem, Unit> OpenInfoCommand { get; }
+        public ReactiveCommand<Unit, Unit> CloseInfoCommand { get; }
+        public ReactiveCommand<PlanItem, Unit> DeleteItemCommand { get; }
+        
+        // (Editaci zde připravíme jako příkaz, ale logika by vyžadovala formulář jako v kalendáři.
+        // Prozatím uděláme alespoň mazání, které je snadné).
+        public ReactiveCommand<PlanItem, Unit> EditItemCommand { get; }
+
 
         public OverviewViewModel(int userId)
         {
@@ -84,11 +111,48 @@ namespace MealPrepHelper.ViewModels
             {
                 ChangeDate((day.Date - CurrentDate).Days);
             });
+            OpenInfoCommand = ReactiveCommand.Create<PlanItem>(item => 
+            {
+                SelectedPlanItem = item;
+                IsInfoVisible = true;
+            });
 
+            CloseInfoCommand = ReactiveCommand.Create(() => 
+            {
+                IsInfoVisible = false;
+                SelectedPlanItem = null;
+            });
+
+            DeleteItemCommand = ReactiveCommand.Create<PlanItem>(DeleteItem);
+            
+            // Editace je složitější (potřebuje formulář), pro teď necháme prázdné nebo jen zavření
+            EditItemCommand = ReactiveCommand.Create<PlanItem>(item => 
+            {
+                // Zde by se musel otevřít editor. Pro jednoduchost zatím jen logujeme nebo nic.
+                // Ideálně by to přepnulo na Kalendář do editačního režimu.
+            });
+            UpdateMealStatusCommand = ReactiveCommand.Create<PlanItem>(UpdateMealStatus);
             LoadData(); 
         }
-        public OverviewViewModel() { }
+        public OverviewViewModel() {}
+        private void DeleteItem(PlanItem item)
+        {
+            if (item == null) return;
 
+            using (var db = new AppDbContext())
+            {
+                var dbItem = db.PlanItems.Find(item.Id);
+                if (dbItem != null)
+                {
+                    db.PlanItems.Remove(dbItem);
+                    db.SaveChanges();
+                }
+            }
+            
+            // Zavřít popup a obnovit data
+            IsInfoVisible = false;
+            LoadData(); // Toto překreslí seznam i makra
+        }
         private void ChangeDate(int daysToAdd)
         {
             CurrentDate = CurrentDate.AddDays(daysToAdd);
@@ -114,6 +178,8 @@ namespace MealPrepHelper.ViewModels
 
                 var meals = db.PlanItems
                     .Include(p => p.Recipe)
+                    .ThenInclude(r => r.Ingredients) // 2. Načte seznam ingrediencí (RecipeIngredient)
+                    .ThenInclude(ri => ri.Ingredient)
                     .Where(p => p.MealPlan.UserId == _currentUserId 
                              && p.ScheduledFor.Date == CurrentDate.Date)
                     .OrderBy(p => p.ScheduledFor)

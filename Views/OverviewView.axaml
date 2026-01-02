@@ -1,190 +1,254 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:MealPrepHelper.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="800"
              x:Class="MealPrepHelper.Views.OverviewView"
              x:DataType="vm:OverviewViewModel">
 
-    <Grid RowDefinitions="Auto, *, Auto">
+    <Grid>
+        <Grid RowDefinitions="Auto, *, Auto">
 
-        <StackPanel Grid.Row="0" Margin="20,20,20,10" Spacing="15">
-            
-            <Grid ColumnDefinitions="Auto, *, Auto">
-    
-    <Button Grid.Column="0" Content="&lt;" Command="{Binding PrevWeekCommand}" Width="40"/>
-    
-    <Button Grid.Column="1" 
-            HorizontalAlignment="Center" VerticalAlignment="Center"
-            Background="Transparent" 
-            BorderThickness="0"
-            Cursor="Hand">
-        
-        <TextBlock Text="{Binding WeekRangeText}" 
-                   FontSize="18" FontWeight="Bold" 
-                   Foreground="Black"/>
-
-        <Button.Flyout>
-            <Flyout Placement="Bottom">
-                <Calendar SelectionMode="SingleDate"
-                          SelectedDate="{Binding CurrentDate}"
-                          DisplayDate="{Binding CurrentDate}"/>
-            </Flyout>
-        </Button.Flyout>
-    </Button>
-    
-    <Button Grid.Column="2" Content="&gt;" Command="{Binding NextWeekCommand}" Width="40"/>
-</Grid>
-
-            <ItemsControl ItemsSource="{Binding WeekDays}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Columns="7"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Button Command="{Binding $parent[UserControl].((vm:OverviewViewModel)DataContext).SelectDayCommand}"
-                                CommandParameter="{Binding}"
-                                Background="{Binding Background}"
-                                HorizontalAlignment="Stretch"
-                                Margin="2">
-                            <StackPanel HorizontalAlignment="Center">
-                                <TextBlock Text="{Binding DayName}" FontSize="10" Foreground="{Binding Foreground}" HorizontalAlignment="Center"/>
-                                <TextBlock Text="{Binding DayNumber}" FontSize="16" FontWeight="{Binding FontWeight}" Foreground="{Binding Foreground}" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-            
-            <Separator Height="1" Background="#EEE"/>
-        </StackPanel>
-
-
-        <ScrollViewer Grid.Row="1">
-            <StackPanel Margin="20,0,20,20" Spacing="20">
-                <TextBlock Text="Plán jídel" FontSize="20" FontWeight="SemiBold" Foreground="#555"/>
+            <StackPanel Grid.Row="0" Margin="20,20,20,10" Spacing="15">
                 
-                <ItemsControl ItemsSource="{Binding TodayMeals}">
-                      <ItemsControl.ItemTemplate>
+                <Grid ColumnDefinitions="Auto, *, Auto">
+                    <Button Grid.Column="0" Content="&lt;" Command="{Binding PrevWeekCommand}" Width="40"/>
+                    
+                    <Button Grid.Column="1" 
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Background="Transparent" 
+                            BorderThickness="0"
+                            Cursor="Hand">
+                        
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <TextBlock Text="📅" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding WeekRangeText}" 
+                                       FontSize="18" FontWeight="Bold" 
+                                       Foreground="Black" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <Button.Flyout>
+                            <Flyout Placement="Bottom">
+                                <Calendar SelectionMode="SingleDate"
+                                          SelectedDate="{Binding CurrentDate, Mode=TwoWay}"
+                                          DisplayDate="{Binding CurrentDate}"/>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+                    
+                    <Button Grid.Column="2" Content="&gt;" Command="{Binding NextWeekCommand}" Width="40"/>
+                </Grid>
+
+                <ItemsControl ItemsSource="{Binding WeekDays}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="7"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Border Background="White" CornerRadius="8" Padding="15" Margin="0,0,0,10" BoxShadow="0 2 5 0 #E0E0E0">
-                                <Grid ColumnDefinitions="Auto, *, Auto">
-                                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Width="70">
-                                        <TextBlock Text="{Binding ScheduledFor, StringFormat='HH:mm'}" FontWeight="Bold"/>
-                                        <TextBlock Text="{Binding MealType}" FontSize="12" Foreground="Gray"/>
-                                    </StackPanel>
-                                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10,0">
-                                        <TextBlock Text="{Binding Recipe.Name}" FontWeight="SemiBold"/>
-                                        <TextBlock Text="{Binding Recipe.TotalCalories, StringFormat='{}{0} kcal'}" FontSize="12" Foreground="Gray"/>
-                                    </StackPanel>
-                                    <CheckBox Grid.Column="2" IsChecked="{Binding IsEaten}" Command="{Binding $parent[UserControl].((vm:OverviewViewModel)DataContext).UpdateMealStatus}" CommandParameter="{Binding}" VerticalAlignment="Center"/>
-                                </Grid>
-                            </Border>
+                            <Button Command="{Binding $parent[UserControl].((vm:OverviewViewModel)DataContext).SelectDayCommand}"
+                                    CommandParameter="{Binding}"
+                                    Background="{Binding Background}"
+                                    HorizontalAlignment="Stretch"
+                                    Margin="2">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="{Binding DayName}" FontSize="10" Foreground="{Binding Foreground}" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding DayNumber}" FontSize="16" FontWeight="{Binding FontWeight}" Foreground="{Binding Foreground}" HorizontalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
                 
-                <TextBlock Text="Pro tento den není nic naplánováno." 
-                           IsVisible="{Binding !TodayMeals.Count}"
-                           HorizontalAlignment="Center" Foreground="Gray" Margin="20"/>
+                <Separator Height="1" Background="#EEE"/>
             </StackPanel>
-        </ScrollViewer>
 
 
-        <Border Grid.Row="2" Background="White" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0" Padding="20">
-            <UniformGrid Columns="5" HorizontalAlignment="Stretch">
-                
-                <StackPanel HorizontalAlignment="Center" Spacing="5">
-    <Grid Width="80" Height="80">
-        <Arc StartAngle="0" SweepAngle="360" Stroke="#EEE" StrokeThickness="8" Stretch="None"/>
-        
-        <Arc StartAngle="-90" 
-             SweepAngle="{Binding AngleCalories}" 
-             Stroke="{Binding ColorCalories}" 
-             StrokeThickness="8" StrokeLineCap="Round" Stretch="None"/>
-             
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="{Binding CurrentCalories}" FontWeight="Bold" HorizontalAlignment="Center"/>
-                <TextBlock Text="kcal" FontSize="10" Foreground="Gray" HorizontalAlignment="Center"/>
-        </StackPanel>
-    </Grid>
-    <TextBlock Text="Kalorie" HorizontalAlignment="Center" FontWeight="SemiBold"/>
-    <TextBlock Text="{Binding GoalCalories, StringFormat='Cíl: {0}'}" FontSize="11" Foreground="Gray" HorizontalAlignment="Center"/>
+            <ScrollViewer Grid.Row="1">
+                <StackPanel Margin="20,0,20,20" Spacing="20">
+                    <TextBlock Text="Plán jídel" FontSize="20" FontWeight="SemiBold" Foreground="#555"/>
+                    
+                    <ItemsControl ItemsSource="{Binding TodayMeals}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="White" CornerRadius="8" Padding="15" Margin="0,0,0,10" BoxShadow="0 2 5 0 #E0E0E0">
+                                    <Grid ColumnDefinitions="Auto, *, Auto">
+                                        <StackPanel Grid.Column="0" VerticalAlignment="Center" Width="70">
+                                            <TextBlock Text="{Binding ScheduledFor, StringFormat='HH:mm'}" FontWeight="Bold"/>
+                                            <TextBlock Text="{Binding MealType}" FontSize="12" Foreground="Gray"/>
+                                        </StackPanel>
+                                        
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10,0">
+                                            <TextBlock Text="{Binding Recipe.Name}" FontWeight="SemiBold"/>
+                                            <TextBlock Text="{Binding Recipe.TotalCalories, StringFormat='{}{0} kcal'}" FontSize="12" Foreground="Gray"/>
+                                        </StackPanel>
+                                        
+                                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+    <Button Content="ℹ️" 
+            Command="{Binding $parent[UserControl].((vm:OverviewViewModel)DataContext).OpenInfoCommand}"
+            CommandParameter="{Binding}"
+            Background="Transparent" BorderThickness="0"/>
+
+    <CheckBox IsChecked="{Binding IsEaten}" 
+              Command="{Binding $parent[UserControl].((vm:OverviewViewModel)DataContext).UpdateMealStatusCommand}" 
+              CommandParameter="{Binding}"/> 
 </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    
+                    <TextBlock Text="Pro tento den není nic naplánováno." 
+                               IsVisible="{Binding !TodayMeals.Count}"
+                               HorizontalAlignment="Center" Foreground="Gray" Margin="20"/>
+                </StackPanel>
+            </ScrollViewer>
 
-<StackPanel HorizontalAlignment="Center" Spacing="5">
-    <Grid Width="80" Height="80">
-        <Arc StartAngle="0" SweepAngle="360" Stroke="#EEE" StrokeThickness="8" Stretch="None"/>
-        
-        <Arc StartAngle="-90" 
-             SweepAngle="{Binding AngleProtein}" 
-             Stroke="{Binding ColorProtein}" 
-             StrokeThickness="8" StrokeLineCap="Round" Stretch="None"/>
-             
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="{Binding CurrentProtein, StringFormat='{}{0:0}'}" FontWeight="Bold" HorizontalAlignment="Center"/>
-                <TextBlock Text="g" FontSize="10" Foreground="Gray" HorizontalAlignment="Center"/>
-        </StackPanel>
-    </Grid>
-    <TextBlock Text="Bílkoviny" HorizontalAlignment="Center" FontWeight="SemiBold"/>
-    <TextBlock Text="{Binding GoalProtein, StringFormat='Cíl: {0}g'}" FontSize="11" Foreground="Gray" HorizontalAlignment="Center"/>
-</StackPanel>
 
-<StackPanel HorizontalAlignment="Center" Spacing="5">
-        <Grid Width="80" Height="80">
-        <Arc StartAngle="0" SweepAngle="360" Stroke="#EEE" StrokeThickness="8" Stretch="None"/>
-        
-        <Arc StartAngle="-90" 
-             SweepAngle="{Binding AngleCarbs}" 
-             Stroke="{Binding ColorCarbs}" 
-             StrokeThickness="8" StrokeLineCap="Round" Stretch="None"/>
-             
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="{Binding CurrentCarbs, StringFormat='{}{0:0}'}" FontWeight="Bold" HorizontalAlignment="Center"/>
-                <TextBlock Text="g" FontSize="10" Foreground="Gray" HorizontalAlignment="Center"/>
-        </StackPanel>
-    </Grid>
-    <TextBlock Text="Sacharidy" HorizontalAlignment="Center" FontWeight="SemiBold"/>
-    <TextBlock Text="{Binding GoalCarbs, StringFormat='Cíl: {0}g'}" FontSize="11" Foreground="Gray" HorizontalAlignment="Center"/>
-</StackPanel>
+            <Border Grid.Row="2" Background="White" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0" Padding="20">
+                <UniformGrid Columns="5" HorizontalAlignment="Stretch">
+                    <StackPanel HorizontalAlignment="Center" Spacing="5">
+                        <Grid Width="60" Height="60">
+                            <Arc StartAngle="0" SweepAngle="360" Stroke="#EEE" StrokeThickness="6" Stretch="None"/>
+                            <Arc StartAngle="-90" SweepAngle="{Binding AngleCalories}" Stroke="{Binding ColorCalories}" StrokeThickness="6" StrokeLineCap="Round" Stretch="None"/>
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding CurrentCalories}" FontWeight="Bold" HorizontalAlignment="Center" FontSize="12"/>
+                                <TextBlock Text="kcal" FontSize="8" Foreground="Gray" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                        <TextBlock Text="Kalorie" HorizontalAlignment="Center" FontSize="11" FontWeight="SemiBold"/>
+                    </StackPanel>
 
-<StackPanel HorizontalAlignment="Center" Spacing="5">
-        <Grid Width="80" Height="80">
-        <Arc StartAngle="0" SweepAngle="360" Stroke="#EEE" StrokeThickness="8" Stretch="None"/>
-        
-        <Arc StartAngle="-90" 
-             SweepAngle="{Binding AngleFat}" 
-             Stroke="{Binding ColorFat}" 
-             StrokeThickness="8" StrokeLineCap="Round" Stretch="None"/>
-             
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="{Binding CurrentFat, StringFormat='{}{0:0}'}" FontWeight="Bold" HorizontalAlignment="Center"/>
-                <TextBlock Text="g" FontSize="10" Foreground="Gray" HorizontalAlignment="Center"/>
-        </StackPanel>
-    </Grid>
-    <TextBlock Text="Tuky" HorizontalAlignment="Center" FontWeight="SemiBold"/>
-    <TextBlock Text="{Binding GoalFat, StringFormat='Cíl: {0}g'}" FontSize="11" Foreground="Gray" HorizontalAlignment="Center"/>
-</StackPanel>
+                    <StackPanel HorizontalAlignment="Center" Spacing="5">
+                        <Grid Width="60" Height="60">
+                            <Arc StartAngle="0" SweepAngle="360" Stroke="#EEE" StrokeThickness="6" Stretch="None"/>
+                            <Arc StartAngle="-90" SweepAngle="{Binding AngleProtein}" Stroke="{Binding ColorProtein}" StrokeThickness="6" StrokeLineCap="Round" Stretch="None"/>
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding CurrentProtein, StringFormat='{}{0:0}'}" FontWeight="Bold" HorizontalAlignment="Center" FontSize="12"/>
+                                <TextBlock Text="g" FontSize="8" Foreground="Gray" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                        <TextBlock Text="Bílkoviny" HorizontalAlignment="Center" FontSize="11" FontWeight="SemiBold"/>
+                    </StackPanel>
 
-<StackPanel HorizontalAlignment="Center" Spacing="5">
-        <Grid Width="80" Height="80">
-        <Arc StartAngle="0" SweepAngle="360" Stroke="#EEE" StrokeThickness="8" Stretch="None"/>
-        
-        <Arc StartAngle="-90" 
-             SweepAngle="{Binding AngleFiber}" 
-             Stroke="{Binding ColorFiber}" 
-             StrokeThickness="8" StrokeLineCap="Round" Stretch="None"/>
-             
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="{Binding CurrentFiber, StringFormat='{}{0:0}'}" FontWeight="Bold" HorizontalAlignment="Center"/>
-                <TextBlock Text="g" FontSize="10" Foreground="Gray" HorizontalAlignment="Center"/>
-        </StackPanel>
-    </Grid>
-    <TextBlock Text="Vláknina" HorizontalAlignment="Center" FontWeight="SemiBold"/>
-    <TextBlock Text="{Binding GoalFiber, StringFormat='Cíl: {0}g'}" FontSize="11" Foreground="Gray" HorizontalAlignment="Center"/>
-</StackPanel>
+                    <StackPanel HorizontalAlignment="Center" Spacing="5">
+                        <Grid Width="60" Height="60">
+                            <Arc StartAngle="0" SweepAngle="360" Stroke="#EEE" StrokeThickness="6" Stretch="None"/>
+                            <Arc StartAngle="-90" SweepAngle="{Binding AngleCarbs}" Stroke="{Binding ColorCarbs}" StrokeThickness="6" StrokeLineCap="Round" Stretch="None"/>
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding CurrentCarbs, StringFormat='{}{0:0}'}" FontWeight="Bold" HorizontalAlignment="Center" FontSize="12"/>
+                                <TextBlock Text="g" FontSize="8" Foreground="Gray" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                        <TextBlock Text="Sacharidy" HorizontalAlignment="Center" FontSize="11" FontWeight="SemiBold"/>
+                    </StackPanel>
 
-            </UniformGrid>
-        </Border>
+                    <StackPanel HorizontalAlignment="Center" Spacing="5">
+                        <Grid Width="60" Height="60">
+                            <Arc StartAngle="0" SweepAngle="360" Stroke="#EEE" StrokeThickness="6" Stretch="None"/>
+                            <Arc StartAngle="-90" SweepAngle="{Binding AngleFat}" Stroke="{Binding ColorFat}" StrokeThickness="6" StrokeLineCap="Round" Stretch="None"/>
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding CurrentFat, StringFormat='{}{0:0}'}" FontWeight="Bold" HorizontalAlignment="Center" FontSize="12"/>
+                                <TextBlock Text="g" FontSize="8" Foreground="Gray" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                        <TextBlock Text="Tuky" HorizontalAlignment="Center" FontSize="11" FontWeight="SemiBold"/>
+                    </StackPanel>
+
+                    <StackPanel HorizontalAlignment="Center" Spacing="5">
+                        <Grid Width="60" Height="60">
+                            <Arc StartAngle="0" SweepAngle="360" Stroke="#EEE" StrokeThickness="6" Stretch="None"/>
+                            <Arc StartAngle="-90" SweepAngle="{Binding AngleFiber}" Stroke="{Binding ColorFiber}" StrokeThickness="6" StrokeLineCap="Round" Stretch="None"/>
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding CurrentFiber, StringFormat='{}{0:0}'}" FontWeight="Bold" HorizontalAlignment="Center" FontSize="12"/>
+                                <TextBlock Text="g" FontSize="8" Foreground="Gray" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </Grid>
+                        <TextBlock Text="Vláknina" HorizontalAlignment="Center" FontSize="11" FontWeight="SemiBold"/>
+                    </StackPanel>
+                </UniformGrid>
+            </Border>
+        </Grid>
+
+        <Popup IsOpen="{Binding IsInfoVisible}"
+               PlacementTarget="{Binding $parent[Window]}"
+               Placement="Center"
+               WindowManagerAddShadowHint="False"
+               Topmost="True">
+
+            <Grid Width="{Binding $parent[Window].Bounds.Width}"
+                  Height="{Binding $parent[Window].Bounds.Height}"
+                  Background="#AA000000">
+
+                <Button Command="{Binding CloseInfoCommand}" 
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                        Background="Transparent" BorderThickness="0" />
+
+                <Border Width="500" Height="650" 
+                        Background="White" CornerRadius="12" 
+                        BoxShadow="0 4 20 0 #40000000"
+                        HorizontalAlignment="Center" VerticalAlignment="Center">
+                    
+                    <Grid RowDefinitions="Auto, *, Auto">
+                        <Grid Grid.Row="0" Margin="20" ColumnDefinitions="*, Auto">
+                            <StackPanel>
+                                <TextBlock Text="{Binding SelectedPlanItem.Recipe.Name}" 
+                                           FontSize="22" FontWeight="Bold" TextWrapping="Wrap"/>
+                                <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,5,0,0">
+                                    <TextBlock Text="{Binding SelectedPlanItem.MealType}" Foreground="#2196F3" FontWeight="SemiBold"/>
+                                    <TextBlock Text="•" Foreground="Gray"/>
+                                    <TextBlock Text="{Binding SelectedPlanItem.ScheduledFor, StringFormat='HH:mm'}" Foreground="Gray"/>
+                                    <TextBlock Text="•" Foreground="Gray"/>
+                                    <TextBlock Text="{Binding SelectedPlanItem.Recipe.TotalCalories, StringFormat='{}{0} kcal'}" Foreground="#FF5722"/>
+                                </StackPanel>
+                            </StackPanel>
+                            
+                            <Button Grid.Column="1" Content="✕" Command="{Binding CloseInfoCommand}"
+                                    Background="Transparent" FontSize="18" Foreground="Gray" VerticalAlignment="Top"/>
+                        </Grid>
+
+                        <ScrollViewer Grid.Row="1" Padding="20,0,20,20">
+                            <StackPanel Spacing="15">
+                                <Border Background="#FAFAFA" CornerRadius="8" Padding="15">
+                                    <StackPanel>
+                                        <TextBlock Text="🛒 Ingredience" FontWeight="Bold" Margin="0,0,0,10"/>
+                                        <ItemsControl ItemsSource="{Binding SelectedPlanItem.Recipe.Ingredients}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid ColumnDefinitions="Auto, Auto, *">
+                                                        <TextBlock Grid.Column="0" Text="{Binding Amount}" FontWeight="Bold" Foreground="#555" Margin="0,0,3,0"/>
+                                                        <TextBlock Grid.Column="1" Text="{Binding Ingredient.Unit}" Foreground="Gray" Margin="0,0,8,0"/>
+                                                        <TextBlock Grid.Column="2" Text="{Binding Ingredient.Name}" TextWrapping="Wrap"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </Border>
+
+                                <StackPanel>
+                                    <TextBlock Text="👨‍🍳 Postup přípravy" FontWeight="Bold" Margin="0,10"/>
+                                    <TextBlock Text="{Binding SelectedPlanItem.Recipe.Instructions}" 
+                                               TextWrapping="Wrap" LineHeight="22"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </ScrollViewer>
+
+                        <Border Grid.Row="2" BorderBrush="#EEE" BorderThickness="0,1,0,0" Padding="20">
+                            <Button Command="{Binding DeleteItemCommand}"
+                                    CommandParameter="{Binding SelectedPlanItem}"
+                                    Content="Smazat jídlo"
+                                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                                    Background="#FFEBEE" Foreground="#D32F2F" BorderThickness="0"
+                                    Height="40" VerticalContentAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Popup>
+
     </Grid>
 </UserControl>
