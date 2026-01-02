@@ -47,6 +47,13 @@
         <DataTemplate DataType="{x:Type vm:CalendarViewModel}">
             <views:CalendarView/>
         </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type vm:PantryViewModel}">
+            <views:PantryView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ShoppingListViewModel}">
+            <views:ShoppingListView/>
+        </DataTemplate>
     </Window.DataTemplates>
 
     <Grid>
@@ -54,10 +61,18 @@
         <Grid RowDefinitions="Auto, *">
             <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10" Margin="10"
                         IsVisible="{Binding IsLoggedIn}">
+                
                 <Button Content="přehled" Classes="tab" Classes.active="{Binding IsOverviewActive}" 
                         Command="{Binding SwitchToOverviewCommand}"/>
+                
                 <Button Content="kalendář" Classes="tab" Classes.active="{Binding IsCalendarActive}" 
                         Command="{Binding SwitchToCalendarCommand}"/>
+
+                <Button Content="spižírna" Classes="tab" Classes.active="{Binding IsPantryActive}" 
+                        Command="{Binding SwitchToPantryCommand}"/>
+
+                <Button Content="nákupní seznam" Classes="tab" Classes.active="{Binding IsShoppingListActive}" 
+                        Command="{Binding SwitchToShoppingListCommand}"/>
             </StackPanel>
 
             <ContentControl Grid.Row="1" Content="{Binding CurrentPage}" Margin="20"/>
@@ -105,35 +120,35 @@
                                 </StackPanel>
 
                                 <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,0">
-    <TextBlock Text="Recept" FontSize="12" Foreground="Gray"/>
-    
-    <Grid ColumnDefinitions="*, 10, Auto, 10, Auto">
-        
-       <AutoCompleteBox Grid.Column="0"
-                 ItemsSource="{Binding CalendarVM.AvailableRecipes}"
-                 SelectedItem="{Binding CalendarVM.FormRecipe}"
-                 
-                 Text="{Binding CalendarVM.SearchText}"  FilterMode="Contains"
-                 ValueMemberBinding="{Binding Name}"
-                 Watermark="Hledat recept..."
-                 HorizontalAlignment="Stretch"/>
+                                    <TextBlock Text="Recept" FontSize="12" Foreground="Gray"/>
+                                    
+                                    <Grid ColumnDefinitions="*, 10, Auto, 10, Auto">
+                                        
+                                       <AutoCompleteBox Grid.Column="0"
+                                                 ItemsSource="{Binding CalendarVM.AvailableRecipes}"
+                                                 SelectedItem="{Binding CalendarVM.FormRecipe}"
+                                                 
+                                                 Text="{Binding CalendarVM.SearchText}"  FilterMode="Contains"
+                                                 ValueMemberBinding="{Binding Name}"
+                                                 Watermark="Hledat recept..."
+                                                 HorizontalAlignment="Stretch"/>
 
-        <Button Grid.Column="2" 
-                Command="{Binding CalendarVM.CancelEditCommand}"
-                Background="#EEE" Foreground="Gray"
-                ToolTip.Tip="Vyčistit formulář / Zrušit úpravu">
-            <StackPanel Orientation="Horizontal" Spacing="5">
-                <TextBlock Text="✕" FontWeight="Bold"/>
-                <TextBlock Text="Zrušit" IsVisible="{Binding CalendarVM.IsEditing}"/>
-            </StackPanel>
-        </Button>
+                                        <Button Grid.Column="2" 
+                                                Command="{Binding CalendarVM.CancelEditCommand}"
+                                                Background="#EEE" Foreground="Gray"
+                                                ToolTip.Tip="Vyčistit formulář / Zrušit úpravu">
+                                            <StackPanel Orientation="Horizontal" Spacing="5">
+                                                <TextBlock Text="✕" FontWeight="Bold"/>
+                                                <TextBlock Text="Zrušit" IsVisible="{Binding CalendarVM.IsEditing}"/>
+                                            </StackPanel>
+                                        </Button>
 
-        <Button Grid.Column="4" 
-                Content="{Binding CalendarVM.SaveButtonText}"
-                Command="{Binding CalendarVM.SaveMealCommand}"
-                Background="#4CAF50" Foreground="White" FontWeight="Bold"/>
-    </Grid>
-</StackPanel>
+                                        <Button Grid.Column="4" 
+                                                Content="{Binding CalendarVM.SaveButtonText}"
+                                                Command="{Binding CalendarVM.SaveMealCommand}"
+                                                Background="#4CAF50" Foreground="White" FontWeight="Bold"/>
+                                    </Grid>
+                                </StackPanel>
                             </Grid>
 
 

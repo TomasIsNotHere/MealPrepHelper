@@ -1,0 +1,12 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MealPrepHelper.ViewModels"
+             x:Class="MealPrepHelper.Views.ShoppingListView"
+             x:DataType="vm:ShoppingListViewModel">
+    <Grid>
+        <TextBlock Text="{Binding WelcomeText}" 
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center"
+                   FontSize="20"/>
+    </Grid>
+</UserControl>

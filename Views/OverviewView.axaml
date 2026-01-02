@@ -215,17 +215,31 @@
                                 <Border Background="#FAFAFA" CornerRadius="8" Padding="15">
                                     <StackPanel>
                                         <TextBlock Text="🛒 Ingredience" FontWeight="Bold" Margin="0,0,0,10"/>
-                                        <ItemsControl ItemsSource="{Binding SelectedPlanItem.Recipe.Ingredients}">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Grid ColumnDefinitions="Auto, Auto, *">
-                                                        <TextBlock Grid.Column="0" Text="{Binding Amount}" FontWeight="Bold" Foreground="#555" Margin="0,0,3,0"/>
-                                                        <TextBlock Grid.Column="1" Text="{Binding Ingredient.Unit}" Foreground="Gray" Margin="0,0,8,0"/>
-                                                        <TextBlock Grid.Column="2" Text="{Binding Ingredient.Name}" TextWrapping="Wrap"/>
-                                                    </Grid>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
+                                        <ItemsControl ItemsSource="{Binding RecipeIngredientsCheck}">
+    <ItemsControl.ItemTemplate>
+        <DataTemplate>
+            <Border BorderBrush="#F0F0F0" BorderThickness="0,0,0,1" Padding="0,5">
+                <Grid ColumnDefinitions="Auto, *, Auto">
+                    
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding StatusIcon}" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                        
+                        <TextBlock Text="{Binding AmountNeeded}" FontWeight="Bold" Foreground="#333"/>
+                        <TextBlock Text="{Binding Unit}" Foreground="Gray"/>
+                        <TextBlock Text="{Binding Name}" Margin="5,0,0,0" TextWrapping="Wrap"/>
+                    </StackPanel>
+
+                    <TextBlock Grid.Column="2" 
+                               Text="{Binding StatusText}" 
+                               Foreground="{Binding StatusColor}" 
+                               FontSize="11" 
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Right"/>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </ItemsControl.ItemTemplate>
+</ItemsControl>
                                     </StackPanel>
                                 </Border>
 

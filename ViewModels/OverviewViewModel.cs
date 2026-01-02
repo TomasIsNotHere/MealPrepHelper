@@ -99,6 +99,8 @@ namespace MealPrepHelper.ViewModels
         // Prozatím uděláme alespoň mazání, které je snadné).
         public ReactiveCommand<PlanItem, Unit> EditItemCommand { get; }
 
+        public ObservableCollection<IngredientCheckViewModel> RecipeIngredientsCheck { get; } = new();
+
 
         public OverviewViewModel(int userId)
         {
@@ -132,10 +134,51 @@ namespace MealPrepHelper.ViewModels
                 // Ideálně by to přepnulo na Kalendář do editačního režimu.
             });
             UpdateMealStatusCommand = ReactiveCommand.Create<PlanItem>(UpdateMealStatus);
+
+            OpenInfoCommand = ReactiveCommand.Create<PlanItem>(OpenInfoWithCheck); // Změna metody
             LoadData(); 
         }
         public OverviewViewModel() {}
-        private void DeleteItem(PlanItem item)
+        private void OpenInfoWithCheck(PlanItem item)
+{
+    SelectedPlanItem = item;
+    
+    // Načteme a zkontrolujeme ingredience
+    CheckIngredientsAvailability(item);
+    
+    IsInfoVisible = true;
+}
+private void CheckIngredientsAvailability(PlanItem item)
+{
+    RecipeIngredientsCheck.Clear();
+
+    using (var db = new AppDbContext())
+    {
+        // 1. Načteme ingredience receptu (pokud nejsou načtené)
+        var recipeIngredients = db.RecipeIngredients
+            .Include(ri => ri.Ingredient)
+            .Where(ri => ri.RecipeId == item.RecipeId)
+            .ToList();
+
+        // 2. Načteme aktuální stav spižírny pro tyto suroviny
+        // Získáme seznam ID ingrediencí v receptu
+        var ingredientIds = recipeIngredients.Select(r => r.IngredientId).ToList();
+        
+        var pantryItems = db.Pantry
+            .Where(p => p.UserId == _currentUserId && ingredientIds.Contains(p.IngredientId))
+            .ToList();
+
+        // 3. Spárujeme a vytvoříme ViewModel
+        foreach (var ri in recipeIngredients)
+        {
+            // Najdeme odpovídající položku ve spižírně
+            var pantryItem = pantryItems.FirstOrDefault(p => p.IngredientId == ri.IngredientId);
+            double amountInPantry = pantryItem?.Amount ?? 0;
+
+            RecipeIngredientsCheck.Add(new IngredientCheckViewModel(ri, amountInPantry));
+        }
+    }
+}        private void DeleteItem(PlanItem item)
         {
             if (item == null) return;
 

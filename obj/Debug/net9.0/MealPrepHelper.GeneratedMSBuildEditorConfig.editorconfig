@@ -43,3 +43,9 @@ build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
 
 [/Users/tomas/Documents/C\#/Avalonia/MealPrepHelper/Views/OverviewView.axaml]
 build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/Users/tomas/Documents/C\#/Avalonia/MealPrepHelper/Views/PantryView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml
+
+[/Users/tomas/Documents/C\#/Avalonia/MealPrepHelper/Views/ShoppingListView.axaml]
+build_metadata.AdditionalFiles.SourceItemGroup = AvaloniaXaml

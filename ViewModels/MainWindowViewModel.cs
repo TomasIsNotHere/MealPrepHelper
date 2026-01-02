@@ -22,29 +22,39 @@ public class MainWindowViewModel : ViewModelBase
         private set 
         {
             this.RaiseAndSetIfChanged(ref _currentPage, value);
+            // Upozorníme UI, že se změnila aktivní stránka (pro zvýraznění menu)
             this.RaisePropertyChanged(nameof(IsOverviewActive));
             this.RaisePropertyChanged(nameof(IsCalendarActive));
+            this.RaisePropertyChanged(nameof(IsPantryActive));
+            this.RaisePropertyChanged(nameof(IsShoppingListActive));
         }
     }
 
-    // Instance viewmodelů
-    // OverviewVM může být null před přihlášením, přidáme '?'
+    // === Instance viewmodelů ===
     public OverviewViewModel? OverviewVM { get; private set; }
-    
-    // CalendarVM bude existovat vždy, aby fungoval popup binding
     public CalendarViewModel CalendarVM { get; private set; }
+    
+    // NOVÉ: Spižírna a Nákupní seznam
+    public PantryViewModel? PantryVM { get; private set; }
+    public ShoppingListViewModel? ShoppingListVM { get; private set; }
 
+    // === Příkazy pro navigaci ===
     public ReactiveCommand<Unit, Unit> SwitchToOverviewCommand { get; }
     public ReactiveCommand<Unit, Unit> SwitchToCalendarCommand { get; }
+    // NOVÉ
+    public ReactiveCommand<Unit, Unit> SwitchToPantryCommand { get; }
+    public ReactiveCommand<Unit, Unit> SwitchToShoppingListCommand { get; }
 
+    // === Pomocné vlastnosti pro zvýraznění tlačítka v menu ===
     public bool IsOverviewActive => CurrentPage == OverviewVM;
     public bool IsCalendarActive => CurrentPage == CalendarVM;
+    public bool IsPantryActive => CurrentPage == PantryVM;
+    public bool IsShoppingListActive => CurrentPage == ShoppingListVM;
 
 
     public MainWindowViewModel()
     {
-        // 1. OPRAVA: Kalendář inicializujeme HNED ZDE
-        // Tím zajistíme, že 'CalendarVM.IsPopupVisible' vrátí false, místo chyby bindingu
+        // Kalendář inicializujeme hned (aby fungoval binding popupu i mimo přihlášení)
         CalendarVM = new CalendarViewModel();
 
         // Startujeme na přihlašovací obrazovce
@@ -54,6 +64,7 @@ public class MainWindowViewModel : ViewModelBase
 
         IsLoggedIn = false;
 
+        // Definice příkazů
         SwitchToOverviewCommand = ReactiveCommand.Create(() => 
         { 
             if (OverviewVM != null) CurrentPage = OverviewVM; 
@@ -61,7 +72,20 @@ public class MainWindowViewModel : ViewModelBase
         
         SwitchToCalendarCommand = ReactiveCommand.Create(() => 
         { 
+            // Kalendář existuje vždy, není třeba null check
             CurrentPage = CalendarVM; 
+        });
+
+        // NOVÉ: Přepínání na Spižírnu
+        SwitchToPantryCommand = ReactiveCommand.Create(() => 
+        { 
+            if (PantryVM != null) CurrentPage = PantryVM; 
+        });
+
+        // NOVÉ: Přepínání na Nákupní seznam
+        SwitchToShoppingListCommand = ReactiveCommand.Create(() => 
+        { 
+            if (ShoppingListVM != null) CurrentPage = ShoppingListVM; 
         });
     }
 
@@ -70,14 +94,15 @@ public class MainWindowViewModel : ViewModelBase
         _currentUser = user;
         IsLoggedIn = true;
         
-        // 2. Overview potřebuje uživatele, takže ho vytvoříme až tady
+        // Inicializujeme stránky, které závisejí na uživateli
         OverviewVM = new OverviewViewModel(user.Id);
         
-        // CalendarVM už máme z konstruktoru, takže ho tu nevytváříme znovu!
-        // (Pokud byste potřeboval předat user.Id i do kalendáře, 
-        //  musel byste tam dodělat metodu např. CalendarVM.SetUser(user.Id))
+        // Zde vytvoříme i Pantry a ShoppingList
+        // (V budoucnu sem asi taky pošlete user.Id, zatím stačí prázdný konstruktor)
+        PantryVM = new PantryViewModel(user.Id);
+        ShoppingListVM = new ShoppingListViewModel();
 
-        // 3. Přepneme na přehled
+        // Po přihlášení přepneme na přehled
         CurrentPage = OverviewVM;
     }
 }
