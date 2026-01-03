@@ -62,7 +62,7 @@ namespace MealPrepHelper.ViewModels
         // Bezparametrický konstruktor pro Designer (aby to nepadalo v náhledu)
         public PantryViewModel() { _userId = 1; }
 
-        private void LoadData()
+        public void LoadData()
         {
             using (var db = new AppDbContext())
             {

@@ -1,0 +1,96 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:MealPrepHelper.ViewModels"
+             x:Class="MealPrepHelper.Views.UserProfileView"
+             x:DataType="vm:UserProfileViewModel"
+>
+
+    <ScrollViewer>
+        <StackPanel Margin="30" Spacing="20" MaxWidth="700" HorizontalAlignment="Center">
+            
+            <TextBlock Text="👤 Můj Profil" FontSize="24" FontWeight="Bold" Margin="0,0,0,10"/>
+
+            <Border Background="White" CornerRadius="10" Padding="20" BoxShadow="0 2 10 0 #10000000">
+    <StackPanel Spacing="15">
+        <TextBlock Text="Osobní údaje" FontWeight="Bold" FontSize="16"/>
+        
+        <Grid ColumnDefinitions="*, 20, *" RowDefinitions="Auto, Auto, Auto">
+            
+            <StackPanel Grid.Row="0" Grid.Column="0">
+                <TextBlock Text="Uživatelské jméno" Foreground="Gray"/>
+                <TextBox Text="{Binding Username}"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="0" Grid.Column="2">
+                <TextBlock Text="Věk" Foreground="Gray"/>
+                <NumericUpDown Value="{Binding Age}" Minimum="1"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,15,0,0">
+                <TextBlock Text="Váha (kg)" Foreground="Gray"/>
+                <NumericUpDown Value="{Binding Weight}" Minimum="1"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,15,0,0">
+                <TextBlock Text="Výška (cm)" Foreground="Gray"/>
+                <NumericUpDown Value="{Binding Height}" Minimum="1"/>
+            </StackPanel>
+
+            <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" 
+                        Spacing="5" Margin="0,15,0,0">
+                <TextBlock Text="Úroveň aktivity:" FontWeight="Bold" Foreground="#555"/>
+<ComboBox ItemsSource="{Binding AvailableActivityLevels}" 
+              SelectedItem="{Binding ActivityLevel}"
+              HorizontalAlignment="Stretch"/>            </StackPanel>
+            
+        </Grid>
+    </StackPanel>
+</Border>
+
+            <Border Background="White" CornerRadius="10" Padding="20" BoxShadow="0 2 10 0 #10000000">
+                <StackPanel Spacing="15">
+                    <TextBlock Text="Denní cíle" FontWeight="Bold" FontSize="16"/>
+
+                    <StackPanel>
+                        <TextBlock Text="Kalorie (kcal)" Foreground="Gray"/>
+                        <NumericUpDown Value="{Binding GoalCalories}" Minimum="0" Increment="50"/>
+                    </StackPanel>
+
+                    <Grid ColumnDefinitions="*, 10, *, 10, *, 10, *">
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Bílkoviny (g)" Foreground="Gray"/>
+                            <NumericUpDown Value="{Binding GoalProtein}" Minimum="0"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Sacharidy (g)" Foreground="Gray"/>
+                            <NumericUpDown Value="{Binding GoalCarbs}" Minimum="0"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="4">
+                            <TextBlock Text="Tuky (g)" Foreground="Gray"/>
+                            <NumericUpDown Value="{Binding GoalFat}" Minimum="0"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="6">
+                             <TextBlock Text="Vláknina (g)" Foreground="Gray"/>
+                             <NumericUpDown Value="{Binding GoalFiber}" Minimum="0"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <StackPanel Spacing="10">
+                <Button Command="{Binding SaveCommand}"
+                        Content="Uložit změny"
+                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                        Background="#2196F3" Foreground="White" FontWeight="Bold" Padding="15"/>
+                
+                <TextBlock Text="{Binding StatusMessage}" 
+                           Foreground="#4CAF50" FontWeight="Bold" 
+                           HorizontalAlignment="Center"/>
+            </StackPanel>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

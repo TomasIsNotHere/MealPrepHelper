@@ -11,6 +11,15 @@ namespace MealPrepHelper.ViewModels
 {
     public class CalendarViewModel : ViewModelBase
     {
+        // 1. Přidáme privátní proměnnou pro ID uživatele
+    private int _userId;
+
+    // 2. Přidáme metodu pro nastavení uživatele (zavoláme ji po přihlášení)
+    public void SetUser(int userId)
+    {
+        _userId = userId;
+        ReloadCalendar(); // Přenačíst kalendář pro konkrétního uživatele
+    }
         // --- KALENDÁŘ DATA ---
         private DateTime _currentMonth;
         private string _monthTitle = string.Empty;
@@ -122,9 +131,11 @@ public string SearchText
             using (var db = new AppDbContext())
             {
                 var busyDates = db.PlanItems
-                    .Where(p => p.ScheduledFor >= startDate && p.ScheduledFor < endDate)
-                    .Select(p => p.ScheduledFor.Date)
-                    .Distinct().ToList();
+                .Include(p => p.MealPlan) // Nutný Include pro přístup k UserId
+                .Where(p => p.MealPlan.UserId == _userId) // <--- ZDE JE FILTR
+                .Where(p => p.ScheduledFor >= startDate && p.ScheduledFor < endDate)
+                .Select(p => p.ScheduledFor.Date)
+                .Distinct().ToList();
 
                 for (int i = 0; i < 42; i++)
                 {
@@ -153,10 +164,12 @@ public string SearchText
 
                 // 2. Načíst jídla pro tento den
                 var meals = db.PlanItems
-                    .Include(p => p.Recipe)
-                    .Where(p => p.ScheduledFor.Date == SelectedDate.Date)
-                    .OrderBy(p => p.ScheduledFor)
-                    .ToList();
+                .Include(p => p.Recipe)
+                .Include(p => p.MealPlan) // Nutný Include
+                .Where(p => p.MealPlan.UserId == _userId) // <--- ZDE JE FILTR
+                .Where(p => p.ScheduledFor.Date == SelectedDate.Date)
+                .OrderBy(p => p.ScheduledFor)
+                .ToList();
 
                 foreach (var m in meals) SelectedDayMeals.Add(m);
             }
@@ -164,37 +177,45 @@ public string SearchText
 
         private void SaveMeal()
 {
-    // KONTROLA: Musí být vybrán recept A TAKÉ typ jídla
+    // 1. Validace formuláře
     if (FormRecipe == null || string.IsNullOrEmpty(FormType)) return;
+
+    // 2. BEZPEČNOSTNÍ KONTROLA: Máme přihlášeného uživatele?
+    if (_userId <= 0)
+    {
+        // Pokud se toto stane, znamená to, že jste v MainWindowViewModel nezavolal CalendarVM.SetUser(user.Id)
+        System.Diagnostics.Debug.WriteLine("CHYBA: Pokus o uložení jídla bez nastaveného ID uživatele!");
+        return;
+    }
 
     using (var db = new AppDbContext())
     {
         var finalDateTime = SelectedDate.Date + FormTime;
 
+        // A. Získáme nebo vytvoříme MealPlan PŘÍMO PRO _userId
+        // (Už nehledáme "prvního uživatele", ale toho našeho)
+        var mealPlan = db.MealPlans.FirstOrDefault(mp => mp.UserId == _userId);
+        
+        if (mealPlan == null)
+        {
+            // Pokud plán neexistuje, vytvoříme ho
+            mealPlan = new MealPlan { UserId = _userId, Name = "Můj Plán" };
+            db.MealPlans.Add(mealPlan);
+            db.SaveChanges(); // Uložíme hned, abychom získali ID plánu
+        }
+
         if (_editingItemId == null)
         {
             // --- PŘIDÁVÁNÍ NOVÉHO ---
-            var user = db.Users.FirstOrDefault();
-            if (user != null)
+            var newItem = new PlanItem
             {
-                var mealPlan = db.MealPlans.FirstOrDefault(mp => mp.UserId == user.Id);
-                if (mealPlan == null)
-                {
-                    mealPlan = new MealPlan { UserId = user.Id, Name = "Můj Plán" };
-                    db.MealPlans.Add(mealPlan);
-                    db.SaveChanges();
-                }
-
-                var newItem = new PlanItem
-                {
-                    MealPlanId = mealPlan.Id,
-                    RecipeId = FormRecipe.Id,
-                    MealType = FormType,
-                    ScheduledFor = finalDateTime,
-                    IsEaten = false
-                };
-                db.PlanItems.Add(newItem);
-            }
+                MealPlanId = mealPlan.Id, // Vazba na plán aktuálního uživatele
+                RecipeId = FormRecipe.Id,
+                MealType = FormType,
+                ScheduledFor = finalDateTime,
+                IsEaten = false
+            };
+            db.PlanItems.Add(newItem);
         }
         else
         {
@@ -212,8 +233,6 @@ public string SearchText
 
     LoadPopupData();
     ReloadCalendar();
-
-    // Vyčistit formulář po uložení
     ResetForm();
 }
         private void DeleteMeal(PlanItem item)

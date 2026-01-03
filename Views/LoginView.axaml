@@ -2,32 +2,99 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:MealPrepHelper.ViewModels"
              x:Class="MealPrepHelper.Views.LoginView"
-             x:DataType="vm:LoginViewModel">
+             x:DataType="vm:LoginViewModel"
+             Background="White">
 
-    <Border Background="#F0F0F0" Padding="40" CornerRadius="10"
-            HorizontalAlignment="Center" VerticalAlignment="Center"
-            BoxShadow="0 0 10 0 LightGray">
-        
-        <StackPanel Width="300" Spacing="15">
-            <TextBlock Text="Vítejte v MealPrep" 
-                       FontSize="24" FontWeight="Bold" 
-                       HorizontalAlignment="Center" Margin="0,0,0,10"/>
+    <Grid>
+        <Border Background="#F5F5F5"/>
 
-            <TextBlock Text="Uživatelské jméno"/>
-            <TextBox Text="{Binding Username}" Watermark="Např. Admin"/>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Border Width="400" VerticalAlignment="Center" HorizontalAlignment="Center"
+                    Background="White" CornerRadius="10" Padding="30" Margin="20"
+                    BoxShadow="0 4 20 0 #20000000">
 
-            <TextBlock Text="Heslo"/>
-            <TextBox Text="{Binding Password}" Watermark="Heslo" PasswordChar="*"/>
+                <StackPanel Spacing="15">
 
-            <TextBlock Text="{Binding ErrorMessage}" 
-                       Foreground="Red" FontSize="12"
-                       IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                    <TextBlock Text="{Binding TitleText}" 
+                               FontSize="24" FontWeight="Bold" 
+                               HorizontalAlignment="Center" Foreground="#333" Margin="0,0,0,10"/>
 
-            <Button Content="Přihlásit se" 
-                    Command="{Binding LoginCommand}"
-                    HorizontalAlignment="Stretch" 
-                    HorizontalContentAlignment="Center"
-                    Background="Green" Foreground="White" Margin="0,10,0,0"/>
-        </StackPanel>
-    </Border>
+                    <StackPanel Spacing="10">
+                        <StackPanel>
+                            <TextBlock Text="Uživatelské jméno" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding Username}" Watermark="Váš login"/>
+                        </StackPanel>
+
+                        <StackPanel>
+                            <TextBlock Text="Heslo" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding Password}" PasswordChar="•" Watermark="Vaše heslo"/>
+                        </StackPanel>
+
+                        <StackPanel IsVisible="{Binding IsRegistering}">
+                            <TextBlock Text="Potvrzení hesla" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding ConfirmPassword}" PasswordChar="•" Watermark="Zadejte heslo znovu"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel IsVisible="{Binding IsRegistering}" Spacing="10">
+                        
+                        <Separator Background="#EEE" Margin="0,5"/>
+                        <TextBlock Text="Údaje pro výpočet jídelníčku" FontWeight="SemiBold" Foreground="#555"/>
+
+                        <Grid ColumnDefinitions="*, 15, *">
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Věk" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
+                                <NumericUpDown Value="{Binding RegAge}" Minimum="10" Maximum="100" FormatString="0"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Pohlaví" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
+                                <ComboBox ItemsSource="{Binding Genders}" 
+                                          SelectedItem="{Binding SelectedGender}" 
+                                          HorizontalAlignment="Stretch"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*, 15, *">
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Výška (cm)" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
+                                <NumericUpDown Value="{Binding RegHeight}" Minimum="100" Maximum="250" FormatString="0"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Váha (kg)" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
+                                <NumericUpDown Value="{Binding RegWeight}" Minimum="30" Maximum="250" FormatString="0"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <StackPanel>
+                            <TextBlock Text="Fyzická aktivita" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
+                            <ComboBox ItemsSource="{Binding ActivityLevels}" 
+                                      SelectedItem="{Binding SelectedActivity}" 
+                                      HorizontalAlignment="Stretch"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <TextBlock Text="{Binding ErrorMessage}" 
+                               Foreground="#D32F2F" FontSize="12" TextWrapping="Wrap"
+                               HorizontalAlignment="Center" 
+                               IsVisible="{Binding !!ErrorMessage.Length}"
+                               Margin="0,10,0,0"/>
+
+                    <Button Command="{Binding MainActionCommand}" 
+                            Content="{Binding MainButtonText}"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                            Background="#2196F3" Foreground="White" FontWeight="Bold" Padding="12"
+                            CornerRadius="5" Margin="0,10,0,0"/>
+
+                    <Button Command="{Binding SwitchModeCommand}"
+                            Content="{Binding SwitchModeText}"
+                            HorizontalAlignment="Center"
+                            Background="Transparent" Foreground="#2196F3" 
+                            FontSize="12" Cursor="Hand" BorderThickness="0"/>
+
+                </StackPanel>
+            </Border>
+        </ScrollViewer>
+    </Grid>
 </UserControl>

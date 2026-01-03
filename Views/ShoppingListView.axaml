@@ -3,10 +3,126 @@
              xmlns:vm="using:MealPrepHelper.ViewModels"
              x:Class="MealPrepHelper.Views.ShoppingListView"
              x:DataType="vm:ShoppingListViewModel">
-    <Grid>
-        <TextBlock Text="{Binding WelcomeText}" 
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Center"
-                   FontSize="20"/>
+
+    <UserControl.Styles>
+        <Style Selector="Border.item">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BoxShadow" Value="0 1 3 0 #20000000"/>
+        </Style>
+        <Style Selector="Border.item.bought">
+            <Setter Property="Background" Value="#E8F5E9"/> <Setter Property="BoxShadow" Value="0 0 0 0 Transparent"/> </Style>
+
+        <Style Selector="TextBlock.text, StackPanel.info">
+            <Setter Property="Opacity" Value="1.0"/>
+        </Style>
+        <Style Selector="TextBlock.text.bought">
+            <Setter Property="Opacity" Value="0.5"/>
+            <Setter Property="TextDecorations" Value="Strikethrough"/>
+        </Style>
+        <Style Selector="StackPanel.info.bought">
+            <Setter Property="Opacity" Value="0.5"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto, *, Auto">
+        
+        <Border Grid.Row="0" Background="White" Margin="20" Padding="20" CornerRadius="10" BoxShadow="0 2 10 0 #10000000">
+            <StackPanel Spacing="15">
+                <TextBlock Text="📝 Nákupní seznam" FontSize="18" FontWeight="Bold"/>
+                
+                <Grid ColumnDefinitions="2*, 1*, Auto, Auto" RowDefinitions="Auto, Auto">
+                    
+                    <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                        <TextBlock Text="Co koupit" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
+                        <AutoCompleteBox ItemsSource="{Binding AllIngredients}" 
+                                         SelectedItem="{Binding SelectedIngredient}"
+                                         ValueMemberBinding="{Binding Name}"
+                                         FilterMode="Contains"
+                                         Watermark="Začněte psát..."
+                                         HorizontalAlignment="Stretch"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                        <TextBlock Text="Množství" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
+                        <NumericUpDown Value="{Binding AddAmount}" Minimum="0" Increment="10"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="0,18,10,0">
+                        <TextBlock Text="{Binding AddUnit}" FontWeight="Bold"/>
+                    </StackPanel>
+
+                    <Button Grid.Column="3" 
+                            Command="{Binding AddCommand}"
+                            Content="Přidat" 
+                            VerticalAlignment="Bottom"
+                            Background="#2196F3" Foreground="White" FontWeight="Bold"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" Margin="20,0,20,0">
+            <ItemsControl ItemsSource="{Binding Items}">
+                <ItemsControl.ItemTemplate>
+    <DataTemplate>
+        <Border Classes="item" 
+                Classes.bought="{Binding IsBought}"
+                CornerRadius="8" Padding="15" Margin="0,0,0,10">
+            
+            <Grid ColumnDefinitions="Auto, *, Auto, Auto">
+                
+                <CheckBox Grid.Column="0" IsChecked="{Binding IsBought}" 
+                          Margin="0,0,15,0" VerticalAlignment="Center"/>
+
+                <TextBlock Grid.Column="1" 
+                           Text="{Binding Name}" 
+                           FontWeight="SemiBold" FontSize="16"
+                           VerticalAlignment="Center"
+                           TextWrapping="Wrap"
+                           Classes="text" Classes.bought="{Binding IsBought}"/>
+                
+                <StackPanel Grid.Column="2" 
+                            Classes="info" Classes.bought="{Binding IsBought}"
+                            Orientation="Horizontal" Spacing="10" 
+                            VerticalAlignment="Center" 
+                            Margin="10,0,10,0">
+                    
+                    <NumericUpDown Value="{Binding Amount}" 
+                                   Minimum="0.1" 
+                                   Increment="1" 
+                                   Width="130"
+                                   FormatString="0.##"/>
+
+                    <TextBlock Text="{Binding Unit}" 
+                               FontWeight="Bold" 
+                               VerticalAlignment="Center"
+                               Width="30"/> </StackPanel>
+
+                <Button Grid.Column="3" 
+                        Command="{Binding $parent[UserControl].((vm:ShoppingListViewModel)DataContext).DeleteCommand}"
+                        CommandParameter="{Binding}"
+                        Background="Transparent" Foreground="#D32F2F" 
+                        BorderThickness="0" Padding="10"
+                        VerticalAlignment="Center">
+                    <TextBlock Text="✕" FontSize="16"/>
+                </Button>
+            </Grid>
+        </Border>
+    </DataTemplate>
+</ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <Border Grid.Row="2" Padding="20" Background="GhostWhite" BorderBrush="#EEE" BorderThickness="0,1,0,0">
+            <Button Command="{Binding FinishShoppingCommand}"
+                    HorizontalAlignment="Right"
+                    Background="#4CAF50" Foreground="White"
+                    CornerRadius="25" Padding="20,12" FontWeight="Bold" FontSize="16">
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <TextBlock Text="✅"/>
+                    <TextBlock Text="Dokončit nákup (Přesunout do spíže)"/>
+                </StackPanel>
+            </Button>
+        </Border>
+
     </Grid>
 </UserControl>

@@ -10,9 +10,8 @@ namespace MealPrepHelper.Data
     {
         public static void Initialize(AppDbContext context)
         {
-            // 1. Vytvoření databáze (pokud neexistuje)
-            context.Database.EnsureCreated();
 
+            context.Database.EnsureCreated();
             // 2. Kontrola, zda už jsou v databázi suroviny. Pokud ano, seeding přeskočíme.
             if (context.Ingredients.Any()) return;
 
@@ -48,6 +47,7 @@ namespace MealPrepHelper.Data
                 HeightCm = 180,
                 WeightKg = 80,
                 Age = 30,
+                Gender = "Male",
                 ActivityLevel = "Active",
                 DailyCalorieGoal = 2500,
                 Protein = 200,

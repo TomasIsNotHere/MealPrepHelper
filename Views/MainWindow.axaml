@@ -47,39 +47,76 @@
         <DataTemplate DataType="{x:Type vm:CalendarViewModel}">
             <views:CalendarView/>
         </DataTemplate>
-        
         <DataTemplate DataType="{x:Type vm:PantryViewModel}">
             <views:PantryView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:ShoppingListViewModel}">
             <views:ShoppingListView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:UserProfileViewModel}">
+            <views:UserProfileView/>
+        </DataTemplate>
     </Window.DataTemplates>
 
     <Grid>
-        
         <Grid RowDefinitions="Auto, *">
-            <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10" Margin="10"
-                        IsVisible="{Binding IsLoggedIn}">
+            
+            <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="10" IsVisible="{Binding IsLoggedIn}">
                 
-                <Button Content="přehled" Classes="tab" Classes.active="{Binding IsOverviewActive}" 
-                        Command="{Binding SwitchToOverviewCommand}"/>
-                
-                <Button Content="kalendář" Classes="tab" Classes.active="{Binding IsCalendarActive}" 
-                        Command="{Binding SwitchToCalendarCommand}"/>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
+                    <Button Content="přehled" Classes="tab" Classes.active="{Binding IsOverviewActive}" 
+                            Command="{Binding SwitchToOverviewCommand}"/>
+                    
+                    <Button Content="kalendář" Classes="tab" Classes.active="{Binding IsCalendarActive}" 
+                            Command="{Binding SwitchToCalendarCommand}"/>
 
-                <Button Content="spižírna" Classes="tab" Classes.active="{Binding IsPantryActive}" 
-                        Command="{Binding SwitchToPantryCommand}"/>
+                    <Button Content="spižírna" Classes="tab" Classes.active="{Binding IsPantryActive}" 
+                            Command="{Binding SwitchToPantryCommand}"/>
 
-                <Button Content="nákupní seznam" Classes="tab" Classes.active="{Binding IsShoppingListActive}" 
-                        Command="{Binding SwitchToShoppingListCommand}"/>
+                    <Button Content="nákupní seznam" Classes="tab" Classes.active="{Binding IsShoppingListActive}" 
+                            Command="{Binding SwitchToShoppingListCommand}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
+    
+    <Button Command="{Binding SwitchToProfileCommand}"
+            Background="Transparent" BorderThickness="0" Cursor="Hand"
+            ToolTip.Tip="Nastavení profilu">
+        <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+            <TextBlock Text="{Binding UserProfileVM.Username}" 
+                       VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#555"/>
+            <Border Width="40" Height="40" CornerRadius="20" Background="#E0E0E0">
+                <TextBlock Text="👤" FontSize="20" 
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Margin="0,0,0,2"/>
+            </Border>
+        </StackPanel>
+    </Button>
+
+    <Border Width="1" Height="25" Background="#DDD" Margin="5,0"/>
+
+    <Button Command="{Binding LogoutCommand}"
+            Background="Transparent" BorderThickness="0" Cursor="Hand"
+            ToolTip.Tip="Odhlásit se"
+            Padding="10">
+        <StackPanel Orientation="Horizontal" Spacing="5">
+            <TextBlock Text="🚪" FontSize="20" VerticalAlignment="Center"/>
             </StackPanel>
 
-            <ContentControl Grid.Row="1" Content="{Binding CurrentPage}" Margin="20"/>
+        <Button.Styles>
+            <Style Selector="Button:pointerover /template/ ContentPresenter">
+                <Setter Property="Background" Value="#FFEBEE"/> </Style>
+        </Button.Styles>
+    </Button>
+
+</StackPanel>
+            </Grid>
+
+            <ContentControl Grid.Row="1" Content="{Binding CurrentPage}" Margin="0,10,0,0"/>
+            
         </Grid>
 
-
-        <Grid IsVisible="{Binding CalendarVM.IsPopupVisible, FallbackValue=False}" Grid.RowSpan="99">
+        <Grid IsVisible="{Binding CalendarVM.IsPopupVisible, FallbackValue=False}">
             
             <Button Command="{Binding CalendarVM.ClosePopupCommand}"
                     HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
@@ -106,7 +143,6 @@
 
                     <Border Grid.Row="1" BorderBrush="#EEE" BorderThickness="0,1,0,0" Padding="20">
                         <Grid RowDefinitions="Auto, *">
-                            
                             <Grid Grid.Row="0" ColumnDefinitions="*, *, Auto" RowDefinitions="Auto, Auto" Margin="0,0,0,15">
                                 <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,10">
                                     <TextBlock Text="Typ jídla" FontSize="12" Foreground="Gray"/>
@@ -121,13 +157,10 @@
 
                                 <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,0">
                                     <TextBlock Text="Recept" FontSize="12" Foreground="Gray"/>
-                                    
                                     <Grid ColumnDefinitions="*, 10, Auto, 10, Auto">
-                                        
                                        <AutoCompleteBox Grid.Column="0"
                                                  ItemsSource="{Binding CalendarVM.AvailableRecipes}"
                                                  SelectedItem="{Binding CalendarVM.FormRecipe}"
-                                                 
                                                  Text="{Binding CalendarVM.SearchText}"  FilterMode="Contains"
                                                  ValueMemberBinding="{Binding Name}"
                                                  Watermark="Hledat recept..."
@@ -151,14 +184,12 @@
                                 </StackPanel>
                             </Grid>
 
-
                             <ScrollViewer Grid.Row="1">
                                 <ItemsControl ItemsSource="{Binding CalendarVM.SelectedDayMeals}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Border Background="#FAFAFA" BorderBrush="#EEE" BorderThickness="1" CornerRadius="5" Padding="10" Margin="0,0,0,8">
                                                 <Grid ColumnDefinitions="Auto, *, Auto, Auto">
-                                                    
                                                     <StackPanel Grid.Column="0" VerticalAlignment="Center" Width="60">
                                                         <TextBlock Text="{Binding ScheduledFor, StringFormat='HH:mm'}" FontWeight="Bold"/>
                                                         <TextBlock Text="{Binding MealType}" FontSize="11" Foreground="Gray"/>
@@ -184,7 +215,6 @@
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
                             </ScrollViewer>
-
                         </Grid>
                     </Border>
                 </Grid>

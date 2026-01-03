@@ -175,8 +175,7 @@ private void CheckIngredientsAvailability(PlanItem item)
             var pantryItem = pantryItems.FirstOrDefault(p => p.IngredientId == ri.IngredientId);
             double amountInPantry = pantryItem?.Amount ?? 0;
 
-            RecipeIngredientsCheck.Add(new IngredientCheckViewModel(ri, amountInPantry));
-        }
+RecipeIngredientsCheck.Add(new IngredientCheckViewModel(ri, amountInPantry, _currentUserId));        }
     }
 }        private void DeleteItem(PlanItem item)
         {

@@ -14,6 +14,7 @@ namespace MealPrepHelper.Models
         public int HeightCm { get; set; }
         public int WeightKg { get; set; }
         public int Age { get; set; }
+        public string Gender { get; set; } = string.Empty; // "Male" nebo "Female"
         public string ActivityLevel { get; set; } = string.Empty; // Sedentary, Lightly Active, Active, Very Active
         public int DailyCalorieGoal { get; set; }
 
