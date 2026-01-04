@@ -110,67 +110,84 @@
 
             <Border Grid.Row="2" Background="White" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0" Padding="20">
                 <UniformGrid Columns="5" HorizontalAlignment="Stretch">
-                    <StackPanel HorizontalAlignment="Center" Spacing="5">
-                        <Grid Width="60" Height="60">
-                            <Arc StartAngle="0" SweepAngle="360" Stroke="#EEE" StrokeThickness="6" Stretch="None"/>
-                            <Arc StartAngle="-90" SweepAngle="{Binding AngleCalories}" Stroke="{Binding ColorCalories}" StrokeThickness="6" StrokeLineCap="Round" Stretch="None"/>
-                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding CurrentCalories}" FontWeight="Bold" HorizontalAlignment="Center" FontSize="12"/>
-                                <TextBlock Text="kcal" FontSize="8" Foreground="Gray" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                        </Grid>
-                        <TextBlock Text="Kalorie" HorizontalAlignment="Center" FontSize="11" FontWeight="SemiBold"/>
-                    </StackPanel>
+    
+    <StackPanel HorizontalAlignment="Center" Spacing="5">
+        <Grid Width="60" Height="60">
+            <Arc StartAngle="0" SweepAngle="360" Stroke="#EEE" StrokeThickness="6" Stretch="None"/>
+            <Arc StartAngle="-90" SweepAngle="{Binding AngleCalories}" Stroke="{Binding ColorCalories}" StrokeThickness="6" StrokeLineCap="Round" Stretch="None"/>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="{Binding CurrentCalories}" FontWeight="Bold" HorizontalAlignment="Center" FontSize="12"/>
+                <TextBlock Text="kcal" FontSize="8" Foreground="Gray" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+        <TextBlock Text="Kalorie" HorizontalAlignment="Center" FontSize="11" FontWeight="SemiBold"/>
+        
+        <TextBlock Text="{Binding GoalCalories, StringFormat='Cíl: {0} kcal'}" 
+                   FontSize="10" Foreground="#999" HorizontalAlignment="Center" Margin="0,-3,0,0"/>
+    </StackPanel>
 
-                    <StackPanel HorizontalAlignment="Center" Spacing="5">
-                        <Grid Width="60" Height="60">
-                            <Arc StartAngle="0" SweepAngle="360" Stroke="#EEE" StrokeThickness="6" Stretch="None"/>
-                            <Arc StartAngle="-90" SweepAngle="{Binding AngleProtein}" Stroke="{Binding ColorProtein}" StrokeThickness="6" StrokeLineCap="Round" Stretch="None"/>
-                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding CurrentProtein, StringFormat='{}{0:0}'}" FontWeight="Bold" HorizontalAlignment="Center" FontSize="12"/>
-                                <TextBlock Text="g" FontSize="8" Foreground="Gray" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                        </Grid>
-                        <TextBlock Text="Bílkoviny" HorizontalAlignment="Center" FontSize="11" FontWeight="SemiBold"/>
-                    </StackPanel>
+    <StackPanel HorizontalAlignment="Center" Spacing="5">
+        <Grid Width="60" Height="60">
+            <Arc StartAngle="0" SweepAngle="360" Stroke="#EEE" StrokeThickness="6" Stretch="None"/>
+            <Arc StartAngle="-90" SweepAngle="{Binding AngleProtein}" Stroke="{Binding ColorProtein}" StrokeThickness="6" StrokeLineCap="Round" Stretch="None"/>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="{Binding CurrentProtein, StringFormat='{}{0:0}'}" FontWeight="Bold" HorizontalAlignment="Center" FontSize="12"/>
+                <TextBlock Text="g" FontSize="8" Foreground="Gray" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+        <TextBlock Text="Bílkoviny" HorizontalAlignment="Center" FontSize="11" FontWeight="SemiBold"/>
+        
+        <TextBlock Text="{Binding GoalProtein, StringFormat='Cíl: {0} g'}" 
+                   FontSize="10" Foreground="#999" HorizontalAlignment="Center" Margin="0,-3,0,0"/>
+    </StackPanel>
 
-                    <StackPanel HorizontalAlignment="Center" Spacing="5">
-                        <Grid Width="60" Height="60">
-                            <Arc StartAngle="0" SweepAngle="360" Stroke="#EEE" StrokeThickness="6" Stretch="None"/>
-                            <Arc StartAngle="-90" SweepAngle="{Binding AngleCarbs}" Stroke="{Binding ColorCarbs}" StrokeThickness="6" StrokeLineCap="Round" Stretch="None"/>
-                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding CurrentCarbs, StringFormat='{}{0:0}'}" FontWeight="Bold" HorizontalAlignment="Center" FontSize="12"/>
-                                <TextBlock Text="g" FontSize="8" Foreground="Gray" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                        </Grid>
-                        <TextBlock Text="Sacharidy" HorizontalAlignment="Center" FontSize="11" FontWeight="SemiBold"/>
-                    </StackPanel>
+    <StackPanel HorizontalAlignment="Center" Spacing="5">
+        <Grid Width="60" Height="60">
+            <Arc StartAngle="0" SweepAngle="360" Stroke="#EEE" StrokeThickness="6" Stretch="None"/>
+            <Arc StartAngle="-90" SweepAngle="{Binding AngleCarbs}" Stroke="{Binding ColorCarbs}" StrokeThickness="6" StrokeLineCap="Round" Stretch="None"/>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="{Binding CurrentCarbs, StringFormat='{}{0:0}'}" FontWeight="Bold" HorizontalAlignment="Center" FontSize="12"/>
+                <TextBlock Text="g" FontSize="8" Foreground="Gray" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+        <TextBlock Text="Sacharidy" HorizontalAlignment="Center" FontSize="11" FontWeight="SemiBold"/>
+        
+        <TextBlock Text="{Binding GoalCarbs, StringFormat='Cíl: {0} g'}" 
+                   FontSize="10" Foreground="#999" HorizontalAlignment="Center" Margin="0,-3,0,0"/>
+    </StackPanel>
 
-                    <StackPanel HorizontalAlignment="Center" Spacing="5">
-                        <Grid Width="60" Height="60">
-                            <Arc StartAngle="0" SweepAngle="360" Stroke="#EEE" StrokeThickness="6" Stretch="None"/>
-                            <Arc StartAngle="-90" SweepAngle="{Binding AngleFat}" Stroke="{Binding ColorFat}" StrokeThickness="6" StrokeLineCap="Round" Stretch="None"/>
-                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding CurrentFat, StringFormat='{}{0:0}'}" FontWeight="Bold" HorizontalAlignment="Center" FontSize="12"/>
-                                <TextBlock Text="g" FontSize="8" Foreground="Gray" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                        </Grid>
-                        <TextBlock Text="Tuky" HorizontalAlignment="Center" FontSize="11" FontWeight="SemiBold"/>
-                    </StackPanel>
+    <StackPanel HorizontalAlignment="Center" Spacing="5">
+        <Grid Width="60" Height="60">
+            <Arc StartAngle="0" SweepAngle="360" Stroke="#EEE" StrokeThickness="6" Stretch="None"/>
+            <Arc StartAngle="-90" SweepAngle="{Binding AngleFat}" Stroke="{Binding ColorFat}" StrokeThickness="6" StrokeLineCap="Round" Stretch="None"/>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="{Binding CurrentFat, StringFormat='{}{0:0}'}" FontWeight="Bold" HorizontalAlignment="Center" FontSize="12"/>
+                <TextBlock Text="g" FontSize="8" Foreground="Gray" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+        <TextBlock Text="Tuky" HorizontalAlignment="Center" FontSize="11" FontWeight="SemiBold"/>
+        
+        <TextBlock Text="{Binding GoalFat, StringFormat='Cíl: {0} g'}" 
+                   FontSize="10" Foreground="#999" HorizontalAlignment="Center" Margin="0,-3,0,0"/>
+    </StackPanel>
 
-                    <StackPanel HorizontalAlignment="Center" Spacing="5">
-                        <Grid Width="60" Height="60">
-                            <Arc StartAngle="0" SweepAngle="360" Stroke="#EEE" StrokeThickness="6" Stretch="None"/>
-                            <Arc StartAngle="-90" SweepAngle="{Binding AngleFiber}" Stroke="{Binding ColorFiber}" StrokeThickness="6" StrokeLineCap="Round" Stretch="None"/>
-                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <TextBlock Text="{Binding CurrentFiber, StringFormat='{}{0:0}'}" FontWeight="Bold" HorizontalAlignment="Center" FontSize="12"/>
-                                <TextBlock Text="g" FontSize="8" Foreground="Gray" HorizontalAlignment="Center"/>
-                            </StackPanel>
-                        </Grid>
-                        <TextBlock Text="Vláknina" HorizontalAlignment="Center" FontSize="11" FontWeight="SemiBold"/>
-                    </StackPanel>
-                </UniformGrid>
-            </Border>
+    <StackPanel HorizontalAlignment="Center" Spacing="5">
+        <Grid Width="60" Height="60">
+            <Arc StartAngle="0" SweepAngle="360" Stroke="#EEE" StrokeThickness="6" Stretch="None"/>
+            <Arc StartAngle="-90" SweepAngle="{Binding AngleFiber}" Stroke="{Binding ColorFiber}" StrokeThickness="6" StrokeLineCap="Round" Stretch="None"/>
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="{Binding CurrentFiber, StringFormat='{}{0:0}'}" FontWeight="Bold" HorizontalAlignment="Center" FontSize="12"/>
+                <TextBlock Text="g" FontSize="8" Foreground="Gray" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+        <TextBlock Text="Vláknina" HorizontalAlignment="Center" FontSize="11" FontWeight="SemiBold"/>
+        
+        <TextBlock Text="{Binding GoalFiber, StringFormat='Cíl: {0} g'}" 
+                   FontSize="10" Foreground="#999" HorizontalAlignment="Center" Margin="0,-3,0,0"/>
+    </StackPanel>
+    
+</UniformGrid>
+            </Border>        
         </Grid>
 
         <Popup IsOpen="{Binding IsInfoVisible}"

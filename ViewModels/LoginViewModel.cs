@@ -58,14 +58,14 @@ namespace MealPrepHelper.ViewModels
         // Seznam pro Pohlaví (ComboBox)
         public List<string> Genders { get; } = new() { "Muž", "Žena" };
         
-        private string _selectedGender;
-        public string SelectedGender { get => _selectedGender; set => this.RaiseAndSetIfChanged(ref _selectedGender, value); }
+        private string _selectedGender = "";
+        public string SelectedGender { get => _selectedGender; set => this.RaiseAndSetIfChanged(ref _selectedGender, value); } 
 
         // Seznam pro Aktivitu (ComboBox)
         // Používáme anglické názvy, aby seděly s NutritionCalculator logika (nebo je musíme mapovat)
         public List<string> ActivityLevels { get; } = new() { "Sedavý", "Lehký", "Střední", "Aktivní", "Velmi aktivní" };
         
-        private string _selectedActivity;
+        private string _selectedActivity = "";
         public string SelectedActivity { get => _selectedActivity; set => this.RaiseAndSetIfChanged(ref _selectedActivity, value); }
 
         // Texty pro UI, které se mění podle režimu

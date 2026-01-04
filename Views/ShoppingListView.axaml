@@ -87,7 +87,7 @@
                             Margin="10,0,10,0">
                     
                     <NumericUpDown Value="{Binding Amount}" 
-                                   Minimum="0.1" 
+                                   Minimum="0" 
                                    Increment="1" 
                                    Width="130"
                                    FormatString="0.##"/>

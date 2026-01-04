@@ -45,8 +45,8 @@ namespace MealPrepHelper.ViewModels
         }
 
         // === PŘÍKAZY ===
-        public ReactiveCommand<Unit, Unit> AddCommand { get; }
-        public ReactiveCommand<PantryItemViewModel, Unit> RemoveCommand { get; }
+        public ReactiveCommand<Unit, Unit> AddCommand { get; } = null!;
+        public ReactiveCommand<PantryItemViewModel, Unit> RemoveCommand { get; } = null!;
 
         // Konstruktor nyní přijímá ID uživatele
         public PantryViewModel(int userId)

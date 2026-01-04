@@ -43,9 +43,9 @@ namespace MealPrepHelper.ViewModels
         }
 
         // === PŘÍKAZY ===
-        public ReactiveCommand<Unit, Unit> AddCommand { get; }
-        public ReactiveCommand<ShoppingItemViewModel, Unit> DeleteCommand { get; }
-        public ReactiveCommand<Unit, Unit> FinishShoppingCommand { get; }
+        public ReactiveCommand<Unit, Unit> AddCommand { get; } = null!;
+        public ReactiveCommand<ShoppingItemViewModel, Unit> DeleteCommand { get; }  = null!;
+        public ReactiveCommand<Unit, Unit> FinishShoppingCommand { get; }  = null!;
 
         public ShoppingListViewModel(int userId)
         {

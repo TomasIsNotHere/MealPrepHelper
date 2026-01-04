@@ -12,30 +12,34 @@ namespace MealPrepHelper.ViewModels
         public string Unit => Model.Unit;
 
         // ZMĚNA: Amount je nyní editovatelná vlastnost
-        public double Amount
-        {
-            get => Model.Amount;
-            set
-            {
-                // Pokud se hodnota změnila, uložíme ji
-                if (Model.Amount != value)
-                {
-                    Model.Amount = value;
-                    this.RaisePropertyChanged(); // Upozorníme UI
+        // Změna z 'double' na 'double?' (povolen null)
+public double? Amount
+{
+    get => Model.Amount;
+    set
+    {
+        // Pokud je hodnota null (prázdné pole), použijeme 0
+        var newValue = value ?? 0;
 
-                    // Uložíme nové množství do databáze
-                    using (var db = new AppDbContext())
-                    {
-                        var item = db.ShoppingList.Find(Model.Id);
-                        if (item != null)
-                        {
-                            item.Amount = value;
-                            db.SaveChanges();
-                        }
-                    }
+        // Porovnáváme s newValue (což je teď bezpečné číslo)
+        if (Model.Amount != newValue)
+        {
+            Model.Amount = newValue;
+            this.RaisePropertyChanged(); 
+
+            // Uložení do databáze
+            using (var db = new AppDbContext())
+            {
+                var item = db.ShoppingList.Find(Model.Id);
+                if (item != null)
+                {
+                    item.Amount = newValue;
+                    db.SaveChanges();
                 }
             }
         }
+    }
+}
 
         // Reakce na Checkbox (IsBought) - beze změn
         public bool IsBought

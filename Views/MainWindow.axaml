@@ -4,7 +4,7 @@
         xmlns:views="using:MealPrepHelper.Views"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+        Width="1200"       Height="700"       MinWidth="1000"     MinHeight="600"
         x:Class="MealPrepHelper.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Title="Meal Prep Helper"
@@ -64,16 +64,16 @@
             <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="10" IsVisible="{Binding IsLoggedIn}">
                 
                 <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
-                    <Button Content="přehled" Classes="tab" Classes.active="{Binding IsOverviewActive}" 
+                    <Button Content="Přehled" Classes="tab" Classes.active="{Binding IsOverviewActive}" 
                             Command="{Binding SwitchToOverviewCommand}"/>
                     
-                    <Button Content="kalendář" Classes="tab" Classes.active="{Binding IsCalendarActive}" 
+                    <Button Content="Kalendář" Classes="tab" Classes.active="{Binding IsCalendarActive}" 
                             Command="{Binding SwitchToCalendarCommand}"/>
 
-                    <Button Content="spižírna" Classes="tab" Classes.active="{Binding IsPantryActive}" 
+                    <Button Content="Spižírna" Classes="tab" Classes.active="{Binding IsPantryActive}" 
                             Command="{Binding SwitchToPantryCommand}"/>
 
-                    <Button Content="nákupní seznam" Classes="tab" Classes.active="{Binding IsShoppingListActive}" 
+                    <Button Content="Nákupní seznam" Classes="tab" Classes.active="{Binding IsShoppingListActive}" 
                             Command="{Binding SwitchToShoppingListCommand}"/>
                 </StackPanel>
 

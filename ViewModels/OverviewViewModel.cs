@@ -36,7 +36,7 @@ namespace MealPrepHelper.ViewModels
 
         public ObservableCollection<CalendarDayViewModel> WeekDays { get; } = new();
         public ObservableCollection<PlanItem> TodayMeals { get; } = new();
-        public ICommand UpdateMealStatusCommand { get; }
+        public ICommand UpdateMealStatusCommand { get; }  = null!;
 
         // === HODNOTY (Values) ===
         private int _currentCalories; public int CurrentCalories { get => _currentCalories; set => this.RaiseAndSetIfChanged(ref _currentCalories, value); }
@@ -70,9 +70,9 @@ namespace MealPrepHelper.ViewModels
         private string _colorFiber = "#9C27B0"; public string ColorFiber { get => _colorFiber; set => this.RaiseAndSetIfChanged(ref _colorFiber, value); }
 
         // === PŘÍKAZY ===
-        public ReactiveCommand<Unit, Unit> NextWeekCommand { get; }
-        public ReactiveCommand<Unit, Unit> PrevWeekCommand { get; }
-        public ReactiveCommand<CalendarDayViewModel, Unit> SelectDayCommand { get; }
+        public ReactiveCommand<Unit, Unit> NextWeekCommand { get; } = null!;
+        public ReactiveCommand<Unit, Unit> PrevWeekCommand { get; } = null!;
+        public ReactiveCommand<CalendarDayViewModel, Unit> SelectDayCommand { get; } = null!;
 
 // === NOVÉ: DETAILNÍ POPUP ===
         
@@ -91,13 +91,13 @@ namespace MealPrepHelper.ViewModels
         }
 
         // === NOVÉ PŘÍKAZY ===
-        public ReactiveCommand<PlanItem, Unit> OpenInfoCommand { get; }
-        public ReactiveCommand<Unit, Unit> CloseInfoCommand { get; }
-        public ReactiveCommand<PlanItem, Unit> DeleteItemCommand { get; }
+        public ReactiveCommand<PlanItem, Unit> OpenInfoCommand { get; } = null!;
+        public ReactiveCommand<Unit, Unit> CloseInfoCommand { get; } = null!;
+        public ReactiveCommand<PlanItem, Unit> DeleteItemCommand { get; } = null!;
         
         // (Editaci zde připravíme jako příkaz, ale logika by vyžadovala formulář jako v kalendáři.
         // Prozatím uděláme alespoň mazání, které je snadné).
-        public ReactiveCommand<PlanItem, Unit> EditItemCommand { get; }
+        public ReactiveCommand<PlanItem, Unit> EditItemCommand { get; } = null!;
 
         public ObservableCollection<IngredientCheckViewModel> RecipeIngredientsCheck { get; } = new();
 

@@ -4,39 +4,86 @@
              x:Class="MealPrepHelper.Views.CalendarView"
              x:DataType="vm:CalendarViewModel">
 
+    <UserControl.Styles>
+    <Style Selector="Border.DayCell">
+        <Setter Property="MinHeight" Value="85"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="#EEEEEE"/>
+        <Setter Property="CornerRadius" Value="4"/>
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="Background" Duration="0:0:0.2"/>
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector="Border.DayCell.today">
+        <Setter Property="Background" Value="#E3F2FD"/>
+        <Setter Property="BorderBrush" Value="#2196F3"/>
+        <Setter Property="BorderThickness" Value="2"/>
+    </Style>
+
+    <Style Selector="Border.DayCell.today TextBlock">
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="#1565C0"/>
+    </Style>
+</UserControl.Styles>
+
+
     <Grid RowDefinitions="Auto, Auto, *">
         
-        <Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto" Margin="20">
+        <Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto" Margin="20,20,20,10">
             <Button Grid.Column="0" Content="&lt;" Command="{Binding PrevMonthCommand}" Width="40"/>
             <TextBlock Grid.Column="1" Text="{Binding MonthTitle}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold"/>
             <Button Grid.Column="2" Content="&gt;" Command="{Binding NextMonthCommand}" Width="40"/>
         </Grid>
 
-        <UniformGrid Grid.Row="1" Columns="7" Margin="10,0,10,10">
-            <TextBlock Text="Po" HorizontalAlignment="Center" FontWeight="Bold"/>
-            <TextBlock Text="Út" HorizontalAlignment="Center" FontWeight="Bold"/>
-            <TextBlock Text="St" HorizontalAlignment="Center" FontWeight="Bold"/>
-            <TextBlock Text="Čt" HorizontalAlignment="Center" FontWeight="Bold"/>
-            <TextBlock Text="Pá" HorizontalAlignment="Center" FontWeight="Bold"/>
-            <TextBlock Text="So" HorizontalAlignment="Center" FontWeight="Bold"/>
-            <TextBlock Text="Ne" HorizontalAlignment="Center" FontWeight="Bold"/>
+        <UniformGrid Grid.Row="1" Columns="7" Margin="10,0">
+            <TextBlock Text="Po" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Margin="0,0,0,10"/>
+            <TextBlock Text="Út" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Margin="0,0,0,10"/>
+            <TextBlock Text="St" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Margin="0,0,0,10"/>
+            <TextBlock Text="Čt" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Margin="0,0,0,10"/>
+            <TextBlock Text="Pá" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Margin="0,0,0,10"/>
+            <TextBlock Text="So" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Margin="0,0,0,10"/>
+            <TextBlock Text="Ne" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Margin="0,0,0,10"/>
         </UniformGrid>
 
-        <ItemsControl Grid.Row="2" ItemsSource="{Binding Days}" Margin="10">
+        <ItemsControl Grid.Row="2" ItemsSource="{Binding Days}" Margin="10,0">
             <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate><UniformGrid Columns="7"/></ItemsPanelTemplate>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="7"/>
+                </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
+            
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Button Command="{Binding $parent[UserControl].((vm:CalendarViewModel)DataContext).OpenPopupCommand}"
                             CommandParameter="{Binding}"
-                            Background="Transparent" Padding="0"
-                            HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
-                            BorderThickness="0">
-                        <Border BorderBrush="#EEEEEE" BorderThickness="1" Height="60">
+                            Background="Transparent" 
+                            BorderThickness="0"
+                            Padding="2" 
+                            HorizontalAlignment="Stretch" 
+                            VerticalAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch"
+                            VerticalContentAlignment="Stretch">
+                        
+                        <Border Classes="DayCell"
+                                Classes.today="{Binding IsToday}">
+                            
                             <Grid>
-                                <TextBlock Text="{Binding DayNumber}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{Binding TextColor}" FontSize="16"/>
-                                <Ellipse Width="6" Height="6" Fill="{Binding DotColor}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,8" IsVisible="{Binding HasPlan}"/>
+                                <TextBlock Text="{Binding DayNumber}" 
+                                           HorizontalAlignment="Center" 
+                                           VerticalAlignment="Center" 
+                                           Foreground="{Binding TextColor}" 
+                                           FontSize="16"/>
+                                
+                                <Ellipse Width="6" Height="6" 
+                                         Fill="{Binding DotColor}" 
+                                         HorizontalAlignment="Center" 
+                                         VerticalAlignment="Bottom" 
+                                         Margin="0,0,0,8" 
+                                         IsVisible="{Binding HasPlan}"/>
                             </Grid>
                         </Border>
                     </Button>

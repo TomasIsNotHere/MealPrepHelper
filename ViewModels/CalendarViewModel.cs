@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
 using MealPrepHelper.Data;
 using MealPrepHelper.Models;
+using System.Globalization; // <--- PŘIDAT TOTO NAHOŘE
 
 namespace MealPrepHelper.ViewModels
 {
@@ -121,8 +122,9 @@ public string SearchText
         public void ReloadCalendar()
         {
             Days.Clear();
-            MonthTitle = _currentMonth.ToString("MMMM yyyy");
+            var czechCulture = new CultureInfo("cs-CZ");
 
+MonthTitle = _currentMonth.ToString("MMMM yyyy", new CultureInfo("cs-CZ"));
             var firstDay = new DateTime(_currentMonth.Year, _currentMonth.Month, 1);
             int offset = ((int)firstDay.DayOfWeek == 0) ? 6 : (int)firstDay.DayOfWeek - 1;
             var startDate = firstDay.AddDays(-offset);
@@ -143,6 +145,7 @@ public string SearchText
                     Days.Add(new DayViewModel 
                     { 
                         Date = d, 
+                        IsToday = d.Date == DateTime.Today,
                         IsCurrentMonth = d.Month == _currentMonth.Month,
                         HasPlan = busyDates.Contains(d.Date)
                     });
@@ -272,7 +275,7 @@ private void ResetForm()
     FormRecipe = null;
     SearchText = string.Empty; // <--- TOTO SMAŽE "asd"
     
-    FormType = null;
+    FormType = "";
     FormTime = TimeSpan.FromHours(12);
     _editingItemId = null;
     SaveButtonText = "Přidat jídlo";
@@ -287,6 +290,7 @@ private void ResetForm()
         private bool _hasPlan;
         public bool HasPlan { get => _hasPlan; set => this.RaiseAndSetIfChanged(ref _hasPlan, value); }
         public bool IsCurrentMonth { get; set; }
+        public bool IsToday { get; set; }
         public string TextColor => IsCurrentMonth ? "Black" : "#CCCCCC";
         public string DotColor => "#4CAF50";
     }

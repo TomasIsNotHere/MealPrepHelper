@@ -49,7 +49,17 @@
 
             <Border Background="White" CornerRadius="10" Padding="20" BoxShadow="0 2 10 0 #10000000">
                 <StackPanel Spacing="15">
-                    <TextBlock Text="Denní cíle" FontWeight="Bold" FontSize="16"/>
+                    <Grid ColumnDefinitions="*, Auto">
+            <TextBlock Grid.Column="0" Text="Denní cíle" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+            
+            <Button Grid.Column="1" 
+                    Command="{Binding RecalculateCommand}"
+                    Content="🔄 Přepočítat dle údajů"
+                    FontSize="12"
+                    Padding="10,5"
+                    Background="#E3F2FD" Foreground="#2196F3"
+                    BorderThickness="0" CornerRadius="5"/>
+        </Grid>
 
                     <StackPanel>
                         <TextBlock Text="Kalorie (kcal)" Foreground="Gray"/>
@@ -87,7 +97,8 @@
                         Background="#2196F3" Foreground="White" FontWeight="Bold" Padding="15"/>
                 
                 <TextBlock Text="{Binding StatusMessage}" 
-                           Foreground="#4CAF50" FontWeight="Bold" 
+                           Foreground="{Binding StatusColor}" 
+           FontWeight="Bold"
                            HorizontalAlignment="Center"/>
             </StackPanel>
 
