@@ -158,7 +158,6 @@ private void Register()
             
             Gender = SelectedGender,
             ActivityLevel = SelectedActivity ?? "Střední", // Pojistka pro aktivitu
-            Settings = new UserSettings { DarkMode = false }
                 };
 
                 // 2. VÝPOČET KALORIÍ A MAKER (Automatika)

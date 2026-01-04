@@ -95,7 +95,8 @@
                     <TextBlock Text="{Binding Unit}" 
                                FontWeight="Bold" 
                                VerticalAlignment="Center"
-                               Width="30"/> </StackPanel>
+                               Width="60"
+                               /> </StackPanel>
 
                 <Button Grid.Column="3" 
                         Command="{Binding $parent[UserControl].((vm:ShoppingListViewModel)DataContext).DeleteCommand}"

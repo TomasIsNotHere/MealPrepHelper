@@ -25,7 +25,6 @@ namespace MealPrepHelper.Models
 
 
         // Vazby
-        public UserSettings? Settings { get; set; }
         public List<MealPlan> Plans { get; set; } = new();
         public List<PantryItem> Pantry { get; set; } = new();
         public List<ShoppingListItem> ShoppingList { get; set; } = new();
