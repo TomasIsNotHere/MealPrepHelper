@@ -4,48 +4,62 @@ namespace MealPrepHelper.Services{
 public static class NutritionCalculator
 {
     public static void CalculateAndSetGoals(User user)
-    {
-        // 1. Převod ActivityLevel (string) na číslo (multiplier)
-        double activityMultiplier = GetActivityMultiplier(user.ActivityLevel);
-
-        // 2. Výpočet BMR (Mifflin-St Jeor rovnice)
-        double bmr;
-        if (user.Gender == "Muž")
         {
-            // (10 x váha) + (6.25 x výška) - (5 x věk) + 5
-            bmr = (10 * user.WeightKg) + (6.25 * user.HeightCm) - (5 * user.Age) + 5;
+            double activityMultiplier = GetActivityMultiplier(user.ActivityLevel);
+            // bmi calculation
+            double bmr;
+            if (user.Gender == "Muž")
+            {
+                bmr = (10 * user.WeightKg) + (6.25 * user.HeightCm) - (5 * user.Age) + 5;
+            }
+            else
+            {
+                bmr = (10 * user.WeightKg) + (6.25 * user.HeightCm) - (5 * user.Age) - 161;
+            }
+
+
+            double calories = bmr * activityMultiplier;
+
+            double targetCalories;
+
+            string goal = user.Goal ?? "Udržení váhy";
+            // total calores based on goal
+            switch (goal)
+            {
+                case "Hubnutí":
+                    targetCalories = calories - 500;
+                    break;
+                case "Nabírání svalů":
+                    targetCalories = calories + 300;
+                    break;
+                case "Udržení váhy":
+                default:
+                    targetCalories = calories;
+                    break;
+            }
+            // minimum calories
+            if (targetCalories < 1200) targetCalories = 1200;
+
+            user.DailyCalorieGoal = (int)targetCalories;
+
+            user.Protein = (int)((targetCalories * 0.30) / 4);
+            user.Carbs = (int)((targetCalories * 0.35) / 4);
+            user.Fat = (int)((targetCalories * 0.35) / 9);
+            
+            user.DietaryFiber = (int)((targetCalories / 1000.0) * 14);
         }
-        else
-        {
-            // (10 x váha) + (6.25 x výška) - (5 x věk) - 161
-            bmr = (10 * user.WeightKg) + (6.25 * user.HeightCm) - (5 * user.Age) - 161;
-        }
 
-        // 3. Celkové denní kalorie (TDEE)
-        int totalCalories = (int)(bmr * activityMultiplier);
-        user.DailyCalorieGoal = totalCalories;
-
-        // 4. Výpočet maker (Příklad: Balanced Diet - 30% Bílkoviny, 35% Tuky, 35% Sacharidy)
-        // 1g Bílkoviny = 4 kcal
-        // 1g Sacharidy = 4 kcal
-        // 1g Tuky = 9 kcal
-
-        user.Protein = (int)((totalCalories * 0.30) / 4);
-        user.Carbs = (int)((totalCalories * 0.35) / 4);
-        user.Fat = (int)((totalCalories * 0.35) / 9);
-        
-        // Vláknina je obvykle 14g na každých 1000 kcal
-        user.DietaryFiber = (int)((totalCalories / 1000.0) * 14);
-    }    private static double GetActivityMultiplier(string levelName)
+    // activity level to multiplier
+    private static double GetActivityMultiplier(string levelName)
     {
         return levelName switch
         {
-            "Sedavý" => 1.2,      // Sedavé
-            "Lehký" => 1.375,        // Lehké (1-3x týdně)
-            "Střední" => 1.55,      // Střední (3-5x týdně)
-            "Aktivní" => 1.725,       // Aktivní (6-7x týdně)
-            "Velmi aktivní" => 1.9,     // Velmi aktivní (fyzická práce + trénink)
-            _ => 1.2                 // Default
+            "Sedavý" => 1.2,
+            "Lehký" => 1.375,
+            "Střední" => 1.55,
+            "Aktivní" => 1.725,
+            "Velmi aktivní" => 1.9,
+            _ => 1.2
         };
     }
 }

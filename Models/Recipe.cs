@@ -7,10 +7,7 @@ namespace MealPrepHelper.Models
     {
         [Key]
         public int Id { get; set; }
-
-        // null = Systémový, vyplněno = Vlastní
         public int? CreatedByUserId { get; set; }
-
         public string Name { get; set; } = string.Empty;
         public string Instructions { get; set; } = string.Empty;
         public int PrepTimeMinutes { get; set; }
@@ -20,7 +17,6 @@ namespace MealPrepHelper.Models
         public double TotalFat { get; set; }
         public double TotalFiber { get; set; }
         public string Difficulty { get; set; } = string.Empty;
-
         public List<RecipeIngredient> Ingredients { get; set; } = new();
     }
 }

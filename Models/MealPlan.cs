@@ -8,11 +8,9 @@ namespace MealPrepHelper.Models
     {
         [Key]
         public int Id { get; set; }
-
         public int UserId { get; set; }
         [ForeignKey(nameof(UserId))]
         public User User { get; set; } = null!;
-
         public string Name { get; set; } = string.Empty;
         public List<PlanItem> Items { get; set; } = new();
     }

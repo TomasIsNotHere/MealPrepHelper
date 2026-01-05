@@ -7,20 +7,19 @@ using Microsoft.EntityFrameworkCore;
 using ReactiveUI;
 using MealPrepHelper.Data;
 using MealPrepHelper.Models;
-using System.Windows.Input;
 
 namespace MealPrepHelper.ViewModels
 {
-   public class OverviewViewModel : ViewModelBase
+    public class OverviewViewModel : ViewModelBase
     {
         private readonly int _currentUserId;
-        
-        // === DATA PRO KALENDÁŘ (Týdenní lišta) ===
+
+        // data
         private DateTime _currentDate;
-        public DateTime CurrentDate 
+        public DateTime CurrentDate
         {
             get => _currentDate;
-            set 
+            set
             {
                 this.RaiseAndSetIfChanged(ref _currentDate, value);
                 LoadData();
@@ -28,7 +27,7 @@ namespace MealPrepHelper.ViewModels
         }
 
         private string _weekRangeText = string.Empty;
-        public string WeekRangeText 
+        public string WeekRangeText
         {
             get => _weekRangeText;
             set => this.RaiseAndSetIfChanged(ref _weekRangeText, value);
@@ -36,12 +35,11 @@ namespace MealPrepHelper.ViewModels
 
         public ObservableCollection<CalendarDayViewModel> WeekDays { get; } = new();
         public ObservableCollection<PlanItem> TodayMeals { get; } = new();
-        public ICommand UpdateMealStatusCommand { get; }  = null!;
 
-        // === HODNOTY (Values) ===
+        // goals and current values
         private int _currentCalories; public int CurrentCalories { get => _currentCalories; set => this.RaiseAndSetIfChanged(ref _currentCalories, value); }
         private int _goalCalories; public int GoalCalories { get => _goalCalories; set => this.RaiseAndSetIfChanged(ref _goalCalories, value); }
-        
+
         private double _currentProtein; public double CurrentProtein { get => _currentProtein; set => this.RaiseAndSetIfChanged(ref _currentProtein, value); }
         private int _goalProtein; public int GoalProtein { get => _goalProtein; set => this.RaiseAndSetIfChanged(ref _goalProtein, value); }
 
@@ -54,53 +52,47 @@ namespace MealPrepHelper.ViewModels
         private double _currentFiber; public double CurrentFiber { get => _currentFiber; set => this.RaiseAndSetIfChanged(ref _currentFiber, value); }
         private int _goalFiber; public int GoalFiber { get => _goalFiber; set => this.RaiseAndSetIfChanged(ref _goalFiber, value); }
 
-        // === ÚHLY PRO GRAFY (0 až 360) ===
+        // ui specs
         private double _angleCalories; public double AngleCalories { get => _angleCalories; set => this.RaiseAndSetIfChanged(ref _angleCalories, value); }
         private double _angleProtein; public double AngleProtein { get => _angleProtein; set => this.RaiseAndSetIfChanged(ref _angleProtein, value); }
         private double _angleCarbs; public double AngleCarbs { get => _angleCarbs; set => this.RaiseAndSetIfChanged(ref _angleCarbs, value); }
         private double _angleFat; public double AngleFat { get => _angleFat; set => this.RaiseAndSetIfChanged(ref _angleFat, value); }
         private double _angleFiber; public double AngleFiber { get => _angleFiber; set => this.RaiseAndSetIfChanged(ref _angleFiber, value); }
 
-        // === BARVY GRAFŮ (Dynamické - chyběly vám) ===
-        // Toto opraví chyby "Unable to resolve property ColorCalories"
         private string _colorCalories = "#FF5722"; public string ColorCalories { get => _colorCalories; set => this.RaiseAndSetIfChanged(ref _colorCalories, value); }
         private string _colorProtein = "#2196F3"; public string ColorProtein { get => _colorProtein; set => this.RaiseAndSetIfChanged(ref _colorProtein, value); }
         private string _colorCarbs = "#FFC107"; public string ColorCarbs { get => _colorCarbs; set => this.RaiseAndSetIfChanged(ref _colorCarbs, value); }
         private string _colorFat = "#4CAF50"; public string ColorFat { get => _colorFat; set => this.RaiseAndSetIfChanged(ref _colorFat, value); }
         private string _colorFiber = "#9C27B0"; public string ColorFiber { get => _colorFiber; set => this.RaiseAndSetIfChanged(ref _colorFiber, value); }
 
-        // === PŘÍKAZY ===
+        // popup detail
+        private bool _isInfoVisible;
+        public bool IsInfoVisible
+        {
+            get => _isInfoVisible;
+            set => this.RaiseAndSetIfChanged(ref _isInfoVisible, value);
+        }
+
+        private PlanItem? _selectedPlanItem;
+        public PlanItem? SelectedPlanItem
+        {
+            get => _selectedPlanItem;
+            set => this.RaiseAndSetIfChanged(ref _selectedPlanItem, value);
+        }
+
+        public ObservableCollection<IngredientCheckViewModel> RecipeIngredientsCheck { get; } = new();
+
+        // commands
         public ReactiveCommand<Unit, Unit> NextWeekCommand { get; } = null!;
         public ReactiveCommand<Unit, Unit> PrevWeekCommand { get; } = null!;
         public ReactiveCommand<CalendarDayViewModel, Unit> SelectDayCommand { get; } = null!;
 
-// === NOVÉ: DETAILNÍ POPUP ===
-        
-        private bool _isInfoVisible;
-        public bool IsInfoVisible 
-        { 
-            get => _isInfoVisible; 
-            set => this.RaiseAndSetIfChanged(ref _isInfoVisible, value); 
-        }
-
-        private PlanItem? _selectedPlanItem;
-        public PlanItem? SelectedPlanItem 
-        { 
-            get => _selectedPlanItem; 
-            set => this.RaiseAndSetIfChanged(ref _selectedPlanItem, value); 
-        }
-
-        // === NOVÉ PŘÍKAZY ===
         public ReactiveCommand<PlanItem, Unit> OpenInfoCommand { get; } = null!;
         public ReactiveCommand<Unit, Unit> CloseInfoCommand { get; } = null!;
+
         public ReactiveCommand<PlanItem, Unit> DeleteItemCommand { get; } = null!;
-        
-        // (Editaci zde připravíme jako příkaz, ale logika by vyžadovala formulář jako v kalendáři.
-        // Prozatím uděláme alespoň mazání, které je snadné).
         public ReactiveCommand<PlanItem, Unit> EditItemCommand { get; } = null!;
-
-        public ObservableCollection<IngredientCheckViewModel> RecipeIngredientsCheck { get; } = new();
-
+        public ReactiveCommand<PlanItem, Unit> UpdateMealStatusCommand { get; } = null!;
 
         public OverviewViewModel(int userId)
         {
@@ -109,75 +101,62 @@ namespace MealPrepHelper.ViewModels
 
             NextWeekCommand = ReactiveCommand.Create(() => ChangeDate(7));
             PrevWeekCommand = ReactiveCommand.Create(() => ChangeDate(-7));
-            SelectDayCommand = ReactiveCommand.Create<CalendarDayViewModel>(day => 
+            SelectDayCommand = ReactiveCommand.Create<CalendarDayViewModel>(day =>
             {
                 ChangeDate((day.Date - CurrentDate).Days);
             });
-            OpenInfoCommand = ReactiveCommand.Create<PlanItem>(item => 
-            {
-                SelectedPlanItem = item;
-                IsInfoVisible = true;
-            });
 
-            CloseInfoCommand = ReactiveCommand.Create(() => 
+            OpenInfoCommand = ReactiveCommand.Create<PlanItem>(OpenInfoWithCheck);
+
+            CloseInfoCommand = ReactiveCommand.Create(() =>
             {
                 IsInfoVisible = false;
                 SelectedPlanItem = null;
             });
 
             DeleteItemCommand = ReactiveCommand.Create<PlanItem>(DeleteItem);
-            
-            // Editace je složitější (potřebuje formulář), pro teď necháme prázdné nebo jen zavření
-            EditItemCommand = ReactiveCommand.Create<PlanItem>(item => 
-            {
-                // Zde by se musel otevřít editor. Pro jednoduchost zatím jen logujeme nebo nic.
-                // Ideálně by to přepnulo na Kalendář do editačního režimu.
-            });
             UpdateMealStatusCommand = ReactiveCommand.Create<PlanItem>(UpdateMealStatus);
+            EditItemCommand = ReactiveCommand.Create<PlanItem>(item => { });
 
-            OpenInfoCommand = ReactiveCommand.Create<PlanItem>(OpenInfoWithCheck); // Změna metody
-            LoadData(); 
+            LoadData();
         }
-        public OverviewViewModel() {}
+
+        // detail logic
         private void OpenInfoWithCheck(PlanItem item)
-{
-    SelectedPlanItem = item;
-    
-    // Načteme a zkontrolujeme ingredience
-    CheckIngredientsAvailability(item);
-    
-    IsInfoVisible = true;
-}
-private void CheckIngredientsAvailability(PlanItem item)
-{
-    RecipeIngredientsCheck.Clear();
-
-    using (var db = new AppDbContext())
-    {
-        // 1. Načteme ingredience receptu (pokud nejsou načtené)
-        var recipeIngredients = db.RecipeIngredients
-            .Include(ri => ri.Ingredient)
-            .Where(ri => ri.RecipeId == item.RecipeId)
-            .ToList();
-
-        // 2. Načteme aktuální stav spižírny pro tyto suroviny
-        // Získáme seznam ID ingrediencí v receptu
-        var ingredientIds = recipeIngredients.Select(r => r.IngredientId).ToList();
-        
-        var pantryItems = db.Pantry
-            .Where(p => p.UserId == _currentUserId && ingredientIds.Contains(p.IngredientId))
-            .ToList();
-
-        // 3. Spárujeme a vytvoříme ViewModel
-        foreach (var ri in recipeIngredients)
         {
-            // Najdeme odpovídající položku ve spižírně
-            var pantryItem = pantryItems.FirstOrDefault(p => p.IngredientId == ri.IngredientId);
-            double amountInPantry = pantryItem?.Amount ?? 0;
+            SelectedPlanItem = item;
+            CheckIngredientsAvailability(item);
+            IsInfoVisible = true;
+        }
 
-RecipeIngredientsCheck.Add(new IngredientCheckViewModel(ri, amountInPantry, _currentUserId));        }
-    }
-}        private void DeleteItem(PlanItem item)
+        private void CheckIngredientsAvailability(PlanItem item)
+        {
+            RecipeIngredientsCheck.Clear();
+
+            using (var db = new AppDbContext())
+            {
+                var recipeIngredients = db.RecipeIngredients
+                    .Include(ri => ri.Ingredient)
+                    .Where(ri => ri.RecipeId == item.RecipeId)
+                    .ToList();
+
+                var ingredientIds = recipeIngredients.Select(r => r.IngredientId).ToList();
+
+                var pantryItems = db.Pantry
+                    .Where(p => p.UserId == _currentUserId && ingredientIds.Contains(p.IngredientId))
+                    .ToList();
+
+                foreach (var ri in recipeIngredients)
+                {
+                    var pantryItem = pantryItems.FirstOrDefault(p => p.IngredientId == ri.IngredientId);
+                    double amountInPantry = pantryItem?.Amount ?? 0;
+
+                    RecipeIngredientsCheck.Add(new IngredientCheckViewModel(ri, amountInPantry, _currentUserId));
+                }
+            }
+        }
+
+        private void DeleteItem(PlanItem item)
         {
             if (item == null) return;
 
@@ -190,29 +169,43 @@ RecipeIngredientsCheck.Add(new IngredientCheckViewModel(ri, amountInPantry, _cur
                     db.SaveChanges();
                 }
             }
-            
-            // Zavřít popup a obnovit data
+
             IsInfoVisible = false;
-            LoadData(); // Toto překreslí seznam i makra
+            LoadData();
         }
+
+        public void UpdateMealStatus(PlanItem item)
+        {
+            using (var db = new AppDbContext())
+            {
+                var dbItem = db.PlanItems.Find(item.Id);
+                if (dbItem != null)
+                {
+                    dbItem.IsEaten = item.IsEaten;
+                    db.SaveChanges();
+                }
+            }
+            RecalculateEaten();
+        }
+
+        // calendar logic
         private void ChangeDate(int daysToAdd)
         {
             CurrentDate = CurrentDate.AddDays(daysToAdd);
-            // LoadData se volá automaticky v setteru CurrentDate
         }
 
         public void LoadData()
         {
             GenerateWeek();
             TodayMeals.Clear();
-            
+
             using (var db = new AppDbContext())
             {
                 var user = db.Users.Find(_currentUserId);
                 if (user != null)
                 {
                     GoalCalories = user.DailyCalorieGoal;
-                    GoalProtein = user.Protein;      // Používám vaše názvy z User modelu
+                    GoalProtein = user.Protein;
                     GoalCarbs = user.Carbs;
                     GoalFat = user.Fat;
                     GoalFiber = user.DietaryFiber;
@@ -220,10 +213,9 @@ RecipeIngredientsCheck.Add(new IngredientCheckViewModel(ri, amountInPantry, _cur
 
                 var meals = db.PlanItems
                     .Include(p => p.Recipe)
-                    .ThenInclude(r => r.Ingredients) // 2. Načte seznam ingrediencí (RecipeIngredient)
+                    .ThenInclude(r => r.Ingredients)
                     .ThenInclude(ri => ri.Ingredient)
-                    .Where(p => p.MealPlan.UserId == _currentUserId 
-                             && p.ScheduledFor.Date == CurrentDate.Date)
+                    .Where(p => p.MealPlan.UserId == _currentUserId && p.ScheduledFor.Date == CurrentDate.Date)
                     .OrderBy(p => p.ScheduledFor)
                     .ToList();
 
@@ -236,6 +228,7 @@ RecipeIngredientsCheck.Add(new IngredientCheckViewModel(ri, amountInPantry, _cur
         private void GenerateWeek()
         {
             WeekDays.Clear();
+
             int diff = (7 + (CurrentDate.DayOfWeek - DayOfWeek.Monday)) % 7;
             var monday = CurrentDate.Date.AddDays(-diff);
             var sunday = monday.AddDays(6);
@@ -262,26 +255,24 @@ RecipeIngredientsCheck.Add(new IngredientCheckViewModel(ri, amountInPantry, _cur
             }
         }
 
+        // calculation logic
         private void RecalculateEaten()
         {
             var eatenMeals = TodayMeals.Where(x => x.IsEaten).ToList();
 
-            // 1. Součty
             CurrentCalories = eatenMeals.Sum(x => x.Recipe.TotalCalories);
             CurrentProtein = Math.Round(eatenMeals.Sum(x => x.Recipe.TotalProtein), 1);
             CurrentCarbs = Math.Round(eatenMeals.Sum(x => x.Recipe.TotalCarbs), 1);
             CurrentFat = Math.Round(eatenMeals.Sum(x => x.Recipe.TotalFat), 1);
             CurrentFiber = Math.Round(eatenMeals.Sum(x => x.Recipe.TotalFiber), 1);
 
-            // 2. Úhly
             AngleCalories = CalculateAngle(CurrentCalories, GoalCalories);
             AngleProtein = CalculateAngle(CurrentProtein, GoalProtein);
             AngleCarbs = CalculateAngle(CurrentCarbs, GoalCarbs);
             AngleFat = CalculateAngle(CurrentFat, GoalFat);
             AngleFiber = CalculateAngle(CurrentFiber, GoalFiber);
 
-            // 3. Barvy (Červená při překročení)
-            string warningColor = "#D32F2F"; // Červená
+            string warningColor = "#D32F2F";
 
             ColorCalories = (CurrentCalories > GoalCalories) ? warningColor : "#FF5722";
             ColorProtein = (CurrentProtein > GoalProtein) ? warningColor : "#2196F3";
@@ -297,32 +288,18 @@ RecipeIngredientsCheck.Add(new IngredientCheckViewModel(ri, amountInPantry, _cur
             if (pct > 1) pct = 1;
             return pct * 360;
         }
-
-        public void UpdateMealStatus(PlanItem item)
-        {
-            using (var db = new AppDbContext())
-            {
-                var dbItem = db.PlanItems.Find(item.Id);
-                if (dbItem != null)
-                {
-                    dbItem.IsEaten = item.IsEaten;
-                    db.SaveChanges();
-                }
-            }
-            RecalculateEaten();
-        }
     }
 
-    // Pomocná třída pro týdenní lištu v Overview
+    // helper viewmodel for calendar days
     public class CalendarDayViewModel : ViewModelBase
     {
         public DateTime Date { get; set; }
         public string DayName { get; set; } = string.Empty;
         public string DayNumber { get; set; } = string.Empty;
-        
+
         private string _background = "White";
         public string Background { get => _background; set => this.RaiseAndSetIfChanged(ref _background, value); }
-        
+
         private string _foreground = "Black";
         public string Foreground { get => _foreground; set => this.RaiseAndSetIfChanged(ref _foreground, value); }
 

@@ -7,8 +7,6 @@ namespace MealPrepHelper.Models
         [Key]
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-
-        // Nutriční hodnoty
         public double Calories { get; set; }
         public double Proteins { get; set; }
         public double Carbs { get; set; }
@@ -17,4 +15,3 @@ namespace MealPrepHelper.Models
         public string Unit { get; set; } = string.Empty;
     }
 }
-//upravene modely jen naplnit data a  enum

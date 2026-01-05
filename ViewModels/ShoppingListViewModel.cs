@@ -12,22 +12,22 @@ namespace MealPrepHelper.ViewModels
     {
         private readonly int _userId;
 
+        // data
         public ObservableCollection<ShoppingItemViewModel> Items { get; } = new();
         public ObservableCollection<Ingredient> AllIngredients { get; } = new();
 
-        // === FORMULÁŘ PŘIDÁNÍ ===
+        // data for add form
         private Ingredient? _selectedIngredient;
         public Ingredient? SelectedIngredient
         {
             get => _selectedIngredient;
-            set 
+            set
             {
                 this.RaiseAndSetIfChanged(ref _selectedIngredient, value);
-                if (value != null) AddUnit = value.Unit; 
+                if (value != null) AddUnit = value.Unit;
             }
         }
 
-        // Zde používáme 'double?' (nullable), aby aplikace nepadala při smazání čísla
         private double? _addAmount;
         public double? AddAmount
         {
@@ -42,10 +42,11 @@ namespace MealPrepHelper.ViewModels
             set => this.RaiseAndSetIfChanged(ref _addUnit, value);
         }
 
-        // === PŘÍKAZY ===
-        public ReactiveCommand<Unit, Unit> AddCommand { get; } = null!;
-        public ReactiveCommand<ShoppingItemViewModel, Unit> DeleteCommand { get; }  = null!;
-        public ReactiveCommand<Unit, Unit> FinishShoppingCommand { get; }  = null!;
+        // commands
+        public ReactiveCommand<Unit, Unit> AddCommand { get; }
+        public ReactiveCommand<ShoppingItemViewModel, Unit> DeleteCommand { get; }
+        public ReactiveCommand<Unit, Unit> FinishShoppingCommand { get; }
+
 
         public ShoppingListViewModel(int userId)
         {
@@ -57,20 +58,24 @@ namespace MealPrepHelper.ViewModels
 
             LoadData();
         }
-        
-        // Konstruktor pro designer
-        public ShoppingListViewModel() { _userId = 1; } 
 
+        public ShoppingListViewModel()
+        {
+            _userId = 1;
+            AddCommand = ReactiveCommand.Create(() => {});
+            DeleteCommand = ReactiveCommand.Create<ShoppingItemViewModel>(_ => {});
+            FinishShoppingCommand = ReactiveCommand.Create(() => {});
+        }
+
+        // logic
         public void LoadData()
         {
             using (var db = new AppDbContext())
             {
-                // 1. Načíst našeptávač
                 AllIngredients.Clear();
                 var ingredients = db.Ingredients.OrderBy(x => x.Name).ToList();
                 foreach (var ing in ingredients) AllIngredients.Add(ing);
 
-                // 2. Načíst nákupní seznam
                 Items.Clear();
                 var dbItems = db.ShoppingList
                     .Include(x => x.Ingredient)
@@ -86,25 +91,22 @@ namespace MealPrepHelper.ViewModels
 
         private void AddItem()
         {
-            // Ošetření null hodnoty (fix pádu aplikace)
             double amount = AddAmount ?? 0;
 
             if (SelectedIngredient == null || amount <= 0) return;
 
             using (var db = new AppDbContext())
             {
-                // Pokud už to v seznamu je, jen sloučíme množství
                 var existing = db.ShoppingList
                     .FirstOrDefault(x => x.UserId == _userId && x.IngredientId == SelectedIngredient.Id);
 
                 if (existing != null)
                 {
                     existing.Amount += amount;
-                    existing.IsBought = false; // Odškrtneme, protože jsme přidali další potřebu
+                    existing.IsBought = false;
                 }
                 else
                 {
-                    // Vytvoříme novou položku (používám vaší třídu ShoppingListItem)
                     db.ShoppingList.Add(new ShoppingListItem
                     {
                         UserId = _userId,
@@ -117,14 +119,15 @@ namespace MealPrepHelper.ViewModels
                 db.SaveChanges();
             }
 
-            // Vyčistit formulář
-            AddAmount = null; 
+            AddAmount = null;
             SelectedIngredient = null;
             LoadData();
         }
 
         private void DeleteItem(ShoppingItemViewModel vm)
         {
+            if (vm == null) return;
+
             using (var db = new AppDbContext())
             {
                 var item = db.ShoppingList.Find(vm.Model.Id);
@@ -137,21 +140,19 @@ namespace MealPrepHelper.ViewModels
             LoadData();
         }
 
-        // FUNKCE: Dokončit nákup (Přesunout koupené do spižírny)
+        // delete shopping list items that are marked as bought and add them to pantry
         private void FinishShopping()
         {
             using (var db = new AppDbContext())
             {
-                // Najdeme vše, co je zaškrtnuté (IsBought == true)
                 var boughtItems = db.ShoppingList
                     .Where(x => x.UserId == _userId && x.IsBought)
                     .ToList();
-                
+
                 if (!boughtItems.Any()) return;
 
                 foreach (var item in boughtItems)
                 {
-                    // 1. Najít nebo vytvořit položku ve spižírně
                     var pantryItem = db.Pantry
                         .FirstOrDefault(p => p.UserId == _userId && p.IngredientId == item.IngredientId);
 
@@ -170,12 +171,11 @@ namespace MealPrepHelper.ViewModels
                         });
                     }
 
-                    // 2. Smazat z nákupního seznamu
                     db.ShoppingList.Remove(item);
                 }
                 db.SaveChanges();
             }
-            // Obnovíme seznam (koupené zmizí)
+
             LoadData();
         }
     }

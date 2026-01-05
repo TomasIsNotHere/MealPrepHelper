@@ -1,105 +1,177 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="using:MealPrepHelper.ViewModels"
-             x:Class="MealPrepHelper.Views.UserProfileView"
-             x:DataType="vm:UserProfileViewModel"
->
+<UserControl
+    x:Class="MealPrepHelper.Views.UserProfileView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:MealPrepHelper.ViewModels"
+    x:DataType="vm:UserProfileViewModel">
 
     <ScrollViewer>
-        <StackPanel Margin="30" Spacing="20" MaxWidth="700" HorizontalAlignment="Center">
-            
-            <TextBlock Text="👤 Můj Profil" FontSize="24" FontWeight="Bold" Margin="0,0,0,10"/>
+        <StackPanel
+            MaxWidth="700"
+            Margin="30"
+            HorizontalAlignment="Center"
+            Spacing="20">
 
-            <Border Background="White" CornerRadius="10" Padding="20" BoxShadow="0 2 10 0 #10000000">
-    <StackPanel Spacing="15">
-        <TextBlock Text="Osobní údaje" FontWeight="Bold" FontSize="16"/>
-        
-        <Grid ColumnDefinitions="*, 20, *" RowDefinitions="Auto, Auto, Auto">
-            
-            <StackPanel Grid.Row="0" Grid.Column="0">
-                <TextBlock Text="Uživatelské jméno" Foreground="Gray"/>
-                <TextBox Text="{Binding Username}"/>
-            </StackPanel>
+            <TextBlock
+                Margin="0,0,0,10"
+                FontSize="24"
+                FontWeight="Bold"
+                Text="👤 Můj Profil" />
 
-            <StackPanel Grid.Row="0" Grid.Column="2">
-                <TextBlock Text="Věk" Foreground="Gray"/>
-                <NumericUpDown Value="{Binding Age}" Minimum="1"/>
-            </StackPanel>
-
-            <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,15,0,0">
-                <TextBlock Text="Váha (kg)" Foreground="Gray"/>
-                <NumericUpDown Value="{Binding Weight}" Minimum="1"/>
-            </StackPanel>
-
-            <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,15,0,0">
-                <TextBlock Text="Výška (cm)" Foreground="Gray"/>
-                <NumericUpDown Value="{Binding Height}" Minimum="1"/>
-            </StackPanel>
-
-            <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" 
-                        Spacing="5" Margin="0,15,0,0">
-                <TextBlock Text="Úroveň aktivity:" FontWeight="Bold" Foreground="#555"/>
-<ComboBox ItemsSource="{Binding AvailableActivityLevels}" 
-              SelectedItem="{Binding ActivityLevel}"
-              HorizontalAlignment="Stretch"/>            </StackPanel>
-            
-        </Grid>
-    </StackPanel>
-</Border>
-
-            <Border Background="White" CornerRadius="10" Padding="20" BoxShadow="0 2 10 0 #10000000">
+            <Border
+                Padding="20"
+                Background="White"
+                BoxShadow="0 2 10 0 #10000000"
+                CornerRadius="10">
                 <StackPanel Spacing="15">
-                    <Grid ColumnDefinitions="*, Auto">
-            <TextBlock Grid.Column="0" Text="Denní cíle" FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-            
-            <Button Grid.Column="1" 
-                    Command="{Binding RecalculateCommand}"
-                    Content="🔄 Přepočítat dle údajů"
-                    FontSize="12"
-                    Padding="10,5"
-                    Background="#E3F2FD" Foreground="#2196F3"
-                    BorderThickness="0" CornerRadius="5"/>
-        </Grid>
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="Bold"
+                        Text="Osobní údaje" />
+
+                    <Grid ColumnDefinitions="*, 20, *" RowDefinitions="Auto, Auto, Auto">
+
+                        <StackPanel Grid.Row="0" Grid.Column="0">
+                            <TextBlock Foreground="Gray" Text="Uživatelské jméno" />
+                            <TextBox Text="{Binding Username}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="0" Grid.Column="2">
+                            <TextBlock Foreground="Gray" Text="Věk" />
+                            <NumericUpDown Minimum="1" Value="{Binding Age}" />
+                        </StackPanel>
+
+                        <StackPanel
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Margin="0,15,0,0">
+                            <TextBlock Foreground="Gray" Text="Váha (kg)" />
+                            <NumericUpDown Minimum="1" Value="{Binding Weight}" />
+                        </StackPanel>
+
+                        <StackPanel
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Margin="0,15,0,0">
+                            <TextBlock Foreground="Gray" Text="Výška (cm)" />
+                            <NumericUpDown Minimum="1" Value="{Binding Height}" />
+                        </StackPanel>
+
+                        <StackPanel
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            Margin="0,15,0,0"
+                            Spacing="5">
+                            <TextBlock
+                                FontWeight="Bold"
+                                Foreground="#555"
+                                Text="Úroveň aktivity:" />
+                            <ComboBox
+                                HorizontalAlignment="Stretch"
+                                ItemsSource="{Binding AvailableActivityLevels}"
+                                SelectedItem="{Binding ActivityLevel}" />
+                        </StackPanel>
+
+                    </Grid>
+
+                    <Separator Margin="0,5" Background="#F0F0F0" />
 
                     <StackPanel>
-                        <TextBlock Text="Kalorie (kcal)" Foreground="Gray"/>
-                        <NumericUpDown Value="{Binding GoalCalories}" Minimum="0" Increment="50"/>
+                        <TextBlock
+                            Margin="0,0,0,5"
+                            FontWeight="SemiBold"
+                            Text="Můj cíl" />
+                        <Border
+                            BorderBrush="#E0E0E0"
+                            BorderThickness="1"
+                            CornerRadius="5">
+                            <ComboBox
+                                HorizontalAlignment="Stretch"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                ItemsSource="{Binding AvailableGoals}"
+                                SelectedItem="{Binding SelectedGoal}" />
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border
+                Padding="20"
+                Background="White"
+                BoxShadow="0 2 10 0 #10000000"
+                CornerRadius="10">
+                <StackPanel Spacing="15">
+
+                    <Grid ColumnDefinitions="*, Auto">
+                        <TextBlock
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            FontSize="16"
+                            FontWeight="Bold"
+                            Text="Denní cíle" />
+
+                        <Button
+                            Grid.Column="1"
+                            Padding="10,5"
+                            Background="#E3F2FD"
+                            BorderThickness="0"
+                            Command="{Binding RecalculateCommand}"
+                            Content="🔄 Přepočítat dle údajů"
+                            CornerRadius="5"
+                            FontSize="12"
+                            Foreground="#2196F3" />
+                    </Grid>
+
+                    <StackPanel>
+                        <TextBlock Foreground="Gray" Text="Kalorie (kcal)" />
+                        <NumericUpDown
+                            Increment="50"
+                            Minimum="0"
+                            Value="{Binding GoalCalories}" />
                     </StackPanel>
 
                     <Grid ColumnDefinitions="*, 10, *, 10, *, 10, *">
                         <StackPanel Grid.Column="0">
-                            <TextBlock Text="Bílkoviny (g)" Foreground="Gray"/>
-                            <NumericUpDown Value="{Binding GoalProtein}" Minimum="0"/>
+                            <TextBlock Foreground="Gray" Text="Bílkoviny (g)" />
+                            <NumericUpDown Minimum="0" Value="{Binding GoalProtein}" />
                         </StackPanel>
-                        
+
                         <StackPanel Grid.Column="2">
-                            <TextBlock Text="Sacharidy (g)" Foreground="Gray"/>
-                            <NumericUpDown Value="{Binding GoalCarbs}" Minimum="0"/>
+                            <TextBlock Foreground="Gray" Text="Sacharidy (g)" />
+                            <NumericUpDown Minimum="0" Value="{Binding GoalCarbs}" />
                         </StackPanel>
 
                         <StackPanel Grid.Column="4">
-                            <TextBlock Text="Tuky (g)" Foreground="Gray"/>
-                            <NumericUpDown Value="{Binding GoalFat}" Minimum="0"/>
+                            <TextBlock Foreground="Gray" Text="Tuky (g)" />
+                            <NumericUpDown Minimum="0" Value="{Binding GoalFat}" />
                         </StackPanel>
-                        
+
                         <StackPanel Grid.Column="6">
-                             <TextBlock Text="Vláknina (g)" Foreground="Gray"/>
-                             <NumericUpDown Value="{Binding GoalFiber}" Minimum="0"/>
+                            <TextBlock Foreground="Gray" Text="Vláknina (g)" />
+                            <NumericUpDown Minimum="0" Value="{Binding GoalFiber}" />
                         </StackPanel>
                     </Grid>
                 </StackPanel>
             </Border>
 
             <StackPanel Spacing="10">
-                <Button Command="{Binding SaveCommand}"
-                        Content="Uložit změny"
-                        HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-                        Background="#2196F3" Foreground="White" FontWeight="Bold" Padding="15"/>
-                
-                <TextBlock Text="{Binding StatusMessage}" 
-                           Foreground="{Binding StatusColor}" 
-           FontWeight="Bold"
-                           HorizontalAlignment="Center"/>
+                <Button
+                    Padding="15"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    Background="#2196F3"
+                    Command="{Binding SaveCommand}"
+                    Content="Uložit změny"
+                    FontWeight="Bold"
+                    Foreground="White" />
+
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    FontWeight="Bold"
+                    Foreground="{Binding StatusColor}"
+                    Text="{Binding StatusMessage}" />
             </StackPanel>
 
         </StackPanel>

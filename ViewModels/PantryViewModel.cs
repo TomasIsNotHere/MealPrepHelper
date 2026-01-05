@@ -12,21 +12,19 @@ namespace MealPrepHelper.ViewModels
     {
         private readonly int _userId;
 
-        // Seznam věcí ve spižírně
+        // data
         public ObservableCollection<PantryItemViewModel> PantryItems { get; } = new();
-        
-        // Seznam pro dropdown (výběr suroviny k přidání)
         public ObservableCollection<Ingredient> AllIngredients { get; } = new();
 
-        // === FORMULÁŘ PŘIDÁNÍ ===
+        // form for adding new item
         private Ingredient? _selectedIngredient;
         public Ingredient? SelectedIngredient
         {
             get => _selectedIngredient;
-            set 
+            set
             {
                 this.RaiseAndSetIfChanged(ref _selectedIngredient, value);
-                if (value != null) AddUnit = value.Unit; 
+                if (value != null) AddUnit = value.Unit;
             }
         }
 
@@ -44,11 +42,11 @@ namespace MealPrepHelper.ViewModels
             set => this.RaiseAndSetIfChanged(ref _addUnit, value);
         }
 
-        // === PŘÍKAZY ===
-        public ReactiveCommand<Unit, Unit> AddCommand { get; } = null!;
-        public ReactiveCommand<PantryItemViewModel, Unit> RemoveCommand { get; } = null!;
+        // commands
+        public ReactiveCommand<Unit, Unit> AddCommand { get; }
+        public ReactiveCommand<PantryItemViewModel, Unit> RemoveCommand { get; }
 
-        // Konstruktor nyní přijímá ID uživatele
+
         public PantryViewModel(int userId)
         {
             _userId = userId;
@@ -58,23 +56,19 @@ namespace MealPrepHelper.ViewModels
 
             LoadData();
         }
-        
-        // Bezparametrický konstruktor pro Designer (aby to nepadalo v náhledu)
-        public PantryViewModel() { _userId = 1; }
 
+        // logic
         public void LoadData()
         {
             using (var db = new AppDbContext())
             {
-                // 1. Načíst katalog surovin
                 AllIngredients.Clear();
                 var ingredients = db.Ingredients.OrderBy(x => x.Name).ToList();
                 foreach (var ing in ingredients) AllIngredients.Add(ing);
 
-                // 2. Načíst spižírnu uživatele
                 PantryItems.Clear();
                 var items = db.Pantry
-                    .Include(p => p.Ingredient) // DŮLEŽITÉ: Načíst i název suroviny
+                    .Include(p => p.Ingredient)
                     .Where(p => p.UserId == _userId)
                     .ToList();
 
@@ -89,21 +83,19 @@ namespace MealPrepHelper.ViewModels
         {
             double amountToAdd = AddAmount ?? 0;
 
-            if (SelectedIngredient == null || AddAmount <= 0) return;
+            if (SelectedIngredient == null || amountToAdd <= 0) return;
 
             using (var db = new AppDbContext())
             {
-                // Zkontrolujeme, jestli už to ve spižírně máme
                 var existing = db.Pantry
                     .FirstOrDefault(p => p.UserId == _userId && p.IngredientId == SelectedIngredient.Id);
 
                 if (existing != null)
                 {
-                    existing.Amount += amountToAdd; // Jen přičteme
+                    existing.Amount += amountToAdd;
                 }
                 else
                 {
-                    // Vytvoříme nový záznam
                     var newItem = new PantryItem
                     {
                         UserId = _userId,
@@ -116,18 +108,18 @@ namespace MealPrepHelper.ViewModels
                 db.SaveChanges();
             }
 
-            // Reset formuláře
-            AddAmount = 0;
+            AddAmount = null;
             SelectedIngredient = null;
+
             LoadData();
         }
 
         private void RemoveItem(PantryItemViewModel vm)
         {
+            if (vm == null) return;
 
             double amountToRemove = vm.AmountToRemove ?? 0;
-
-            if (vm == null || vm.AmountToRemove <= 0) return;
+            if (amountToRemove <= 0) return;
 
             using (var db = new AppDbContext())
             {
@@ -136,12 +128,11 @@ namespace MealPrepHelper.ViewModels
                 {
                     dbItem.Amount -= amountToRemove;
 
-                    // Pokud jsme odebrali všechno (nebo víc), smažeme řádek úplně
                     if (dbItem.Amount <= 0.001)
                     {
                         db.Pantry.Remove(dbItem);
                     }
-                    
+
                     db.SaveChanges();
                 }
             }

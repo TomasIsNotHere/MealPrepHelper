@@ -1,33 +1,30 @@
 using ReactiveUI;
-using System.Reactive; // Pro Unit
+using System.Reactive;
 using System.Linq;
 using MealPrepHelper.Data;
 using MealPrepHelper.Models;
 
 namespace MealPrepHelper.ViewModels
 {
-    // ZMĚNA: Dědíme od ViewModelBase, abychom mohli používat ReactiveCommand
     public class IngredientCheckViewModel : ViewModelBase
     {
+        // data
         private readonly int _userId;
         private readonly int _ingredientId;
+        public string Name { get; }
+        public string Unit { get; }
+        public double AmountNeeded { get; }
+        public double AmountInPantry { get; }
 
-        public string Name { get; set; } = "";
-        public double AmountNeeded { get; set; }
-        public string Unit { get; set; } = "";
-        public double AmountInPantry { get; set; }
+        // state
         public bool HasEnough => AmountInPantry >= AmountNeeded;
-
-        // Barvy a texty
-        public string StatusColor => HasEnough ? "#4CAF50" : "#F44336"; 
+        public string StatusColor => HasEnough ? "#4CAF50" : "#F44336";
         public string StatusIcon => HasEnough ? "✅" : "❌";
-        public string StatusText => HasEnough 
-            ? $"Máte: {AmountInPantry} {Unit}" 
+        public string StatusText => HasEnough
+            ? $"Máte: {AmountInPantry} {Unit}"
             : $"Chybí (Máte jen {AmountInPantry} {Unit})";
 
-        // === NOVÉ: Logika pro přidání na nákupní seznam ===
-        
-        // Měnící se ikona tlačítka (Košík -> Fajfka)
+        // shopping cart
         private string _cartIcon = "🛒+";
         public string CartIcon
         {
@@ -35,49 +32,54 @@ namespace MealPrepHelper.ViewModels
             set => this.RaiseAndSetIfChanged(ref _cartIcon, value);
         }
 
-        // Aby tlačítko nešlo zmáčknout 2x
         private bool _canAdd = true;
         public bool CanAdd
         {
             get => _canAdd;
             set => this.RaiseAndSetIfChanged(ref _canAdd, value);
         }
-
         public ReactiveCommand<Unit, Unit> AddToCartCommand { get; }
 
-        // Konstruktor nyní přijímá i UserID a IngredientID
         public IngredientCheckViewModel(RecipeIngredient ri, double pantryAmount, int userId)
         {
-            Name = ri.Ingredient.Name;
+            if (ri.Ingredient == null)
+            {
+                Name = "Neznámá surovina";
+                Unit = "";
+            }
+            else
+            {
+                Name = ri.Ingredient.Name;
+                Unit = ri.Ingredient.Unit;
+            }
+
             AmountNeeded = ri.Amount;
-            Unit = ri.Ingredient.Unit;
             AmountInPantry = pantryAmount;
-            
+
             _ingredientId = ri.IngredientId;
             _userId = userId;
 
             AddToCartCommand = ReactiveCommand.Create(AddToShoppingList);
         }
 
+        // methods
         private void AddToShoppingList()
         {
             if (!CanAdd) return;
 
             using (var db = new AppDbContext())
             {
-                // Zjistíme, jestli už to v seznamu není
                 var existingItem = db.ShoppingList
                     .FirstOrDefault(x => x.UserId == _userId && x.IngredientId == _ingredientId);
 
-                // Kolik potřebujeme dokoupit? (Rozdíl mezi tím co je potřeba a co máme)
-                // Pokud máme 0, koupíme vše. Pokud nám chybí jen 50g, koupíme 50g.
                 double amountToBuy = AmountNeeded - AmountInPantry;
-                if (amountToBuy <= 0) amountToBuy = AmountNeeded; // Pojistka
+
+                if (amountToBuy <= 0) amountToBuy = AmountNeeded;
 
                 if (existingItem != null)
                 {
                     existingItem.Amount += amountToBuy;
-                    existingItem.IsBought = false; // Znovu odškrtnout, pokud už bylo koupeno
+                    existingItem.IsBought = false;
                 }
                 else
                 {
@@ -93,9 +95,8 @@ namespace MealPrepHelper.ViewModels
                 db.SaveChanges();
             }
 
-            // Vizuální zpětná vazba
             CartIcon = "✔️";
-            CanAdd = false; // Deaktivovat tlačítko
+            CanAdd = false;
         }
     }
 }

@@ -6,42 +6,39 @@ namespace MealPrepHelper.ViewModels
 {
     public class ShoppingItemViewModel : ViewModelBase
     {
+        // data
         public ShoppingListItem Model { get; }
 
         public string Name => Model.Ingredient?.Name ?? "Neznámá";
         public string Unit => Model.Unit;
 
-        // ZMĚNA: Amount je nyní editovatelná vlastnost
-        // Změna z 'double' na 'double?' (povolen null)
-public double? Amount
-{
-    get => Model.Amount;
-    set
-    {
-        // Pokud je hodnota null (prázdné pole), použijeme 0
-        var newValue = value ?? 0;
+        // editable properties
 
-        // Porovnáváme s newValue (což je teď bezpečné číslo)
-        if (Model.Amount != newValue)
+        public double? Amount
         {
-            Model.Amount = newValue;
-            this.RaisePropertyChanged(); 
-
-            // Uložení do databáze
-            using (var db = new AppDbContext())
+            get => Model.Amount;
+            set
             {
-                var item = db.ShoppingList.Find(Model.Id);
-                if (item != null)
+                var newValue = value ?? 0;
+
+                if (Model.Amount != newValue)
                 {
-                    item.Amount = newValue;
-                    db.SaveChanges();
+                    Model.Amount = newValue;
+                    this.RaisePropertyChanged();
+
+                    using (var db = new AppDbContext())
+                    {
+                        var item = db.ShoppingList.Find(Model.Id);
+                        if (item != null)
+                        {
+                            item.Amount = newValue;
+                            db.SaveChanges();
+                        }
+                    }
                 }
             }
         }
-    }
-}
 
-        // Reakce na Checkbox (IsBought) - beze změn
         public bool IsBought
         {
             get => Model.IsBought;
@@ -51,7 +48,7 @@ public double? Amount
                 {
                     Model.IsBought = value;
                     this.RaisePropertyChanged();
-                    
+
                     using (var db = new AppDbContext())
                     {
                         var item = db.ShoppingList.Find(Model.Id);

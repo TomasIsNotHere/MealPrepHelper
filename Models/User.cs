@@ -10,21 +10,17 @@ namespace MealPrepHelper.Models
         public string Username { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string PasswordHash { get; set; } = string.Empty;
-
         public int HeightCm { get; set; }
         public int WeightKg { get; set; }
         public int Age { get; set; }
-        public string Gender { get; set; } = string.Empty; // "Male" nebo "Female"
-        public string ActivityLevel { get; set; } = string.Empty; // Sedentary, Lightly Active, Active, Very Active
+        public string Gender { get; set; } = string.Empty;
+        public string ActivityLevel { get; set; } = string.Empty;
+        public string Goal { get; set; } = string.Empty;
         public int DailyCalorieGoal { get; set; }
-
         public int Fat { get; set; }
         public int Carbs { get; set; }
         public int DietaryFiber { get; set; }
         public int Protein { get; set; }
-
-
-        // Vazby
         public List<MealPlan> Plans { get; set; } = new();
         public List<PantryItem> Pantry { get; set; } = new();
         public List<ShoppingListItem> ShoppingList { get; set; } = new();

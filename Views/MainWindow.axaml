@@ -1,185 +1,295 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:MealPrepHelper.ViewModels"
-        xmlns:views="using:MealPrepHelper.Views"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        Width="1200"       Height="700"       MinWidth="1000"     MinHeight="600"
-        x:Class="MealPrepHelper.Views.MainWindow"
-        x:DataType="vm:MainWindowViewModel"
-        Title="Meal Prep Helper"
-        xmlns:models="using:MealPrepHelper.Models"
-        RequestedThemeVariant="Light"
-        Background="GhostWhite">
+<Window
+    x:Class="MealPrepHelper.Views.MainWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:MealPrepHelper.Models"
+    xmlns:views="using:MealPrepHelper.Views"
+    xmlns:vm="using:MealPrepHelper.ViewModels"
+    Title="Meal Prep Helper"
+    Width="1200"
+    Height="700"
+    MinWidth="1000"
+    MinHeight="600"
+    x:DataType="vm:MainWindowViewModel"
+    Background="GhostWhite"
+    RequestedThemeVariant="Light">
 
     <Window.Styles>
         <Style Selector="Button.tab">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="FontSize" Value="18"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
-            <Setter Property="Padding" Value="20,10"/>
-            <Setter Property="CornerRadius" Value="0"/>
-            <Setter Property="BorderThickness" Value="0,0,0,3"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="20,10" />
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="BorderThickness" Value="0,0,0,3" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
         </Style>
         <Style Selector="Button.tab.active">
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="BorderBrush" Value="#C1E1C1"/>
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="BorderBrush" Value="#C1E1C1" />
         </Style>
         <Style Selector="Button.tab.inactive">
-            <Setter Property="Foreground" Value="Gray"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Foreground" Value="Gray" />
+            <Setter Property="BorderBrush" Value="Transparent" />
         </Style>
         <Style Selector="Button.tab:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#333"/>
-            <Setter Property="FontSize" Value="19"/>
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#333" />
+            <Setter Property="FontSize" Value="19" />
         </Style>
     </Window.Styles>
 
     <Window.DataTemplates>
         <DataTemplate DataType="{x:Type vm:LoginViewModel}">
-            <views:LoginView/>
+            <views:LoginView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:OverviewViewModel}">
-            <views:OverviewView/>
+            <views:OverviewView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:CalendarViewModel}">
-            <views:CalendarView/>
+            <views:CalendarView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:PantryViewModel}">
-            <views:PantryView/>
+            <views:PantryView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:ShoppingListViewModel}">
-            <views:ShoppingListView/>
+            <views:ShoppingListView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:UserProfileViewModel}">
-            <views:UserProfileView/>
+            <views:UserProfileView />
         </DataTemplate>
     </Window.DataTemplates>
 
     <Grid>
         <Grid RowDefinitions="Auto, *">
-            
-            <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Margin="10" IsVisible="{Binding IsLoggedIn}">
-                
-                <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
-                    <Button Content="Přehled" Classes="tab" Classes.active="{Binding IsOverviewActive}" 
-                            Command="{Binding SwitchToOverviewCommand}"/>
-                    
-                    <Button Content="Kalendář" Classes="tab" Classes.active="{Binding IsCalendarActive}" 
-                            Command="{Binding SwitchToCalendarCommand}"/>
 
-                    <Button Content="Spižírna" Classes="tab" Classes.active="{Binding IsPantryActive}" 
-                            Command="{Binding SwitchToPantryCommand}"/>
+            <Grid
+                Grid.Row="0"
+                Margin="10"
+                ColumnDefinitions="*, Auto"
+                IsVisible="{Binding IsLoggedIn}">
 
-                    <Button Content="Nákupní seznam" Classes="tab" Classes.active="{Binding IsShoppingListActive}" 
-                            Command="{Binding SwitchToShoppingListCommand}"/>
+                <StackPanel
+                    Grid.Column="0"
+                    Orientation="Horizontal"
+                    Spacing="10">
+                    <Button
+                        Classes="tab"
+                        Classes.active="{Binding IsOverviewActive}"
+                        Command="{Binding SwitchToOverviewCommand}"
+                        Content="Přehled" />
+
+                    <Button
+                        Classes="tab"
+                        Classes.active="{Binding IsCalendarActive}"
+                        Command="{Binding SwitchToCalendarCommand}"
+                        Content="Kalendář" />
+
+                    <Button
+                        Classes="tab"
+                        Classes.active="{Binding IsPantryActive}"
+                        Command="{Binding SwitchToPantryCommand}"
+                        Content="Spižírna" />
+
+                    <Button
+                        Classes="tab"
+                        Classes.active="{Binding IsShoppingListActive}"
+                        Command="{Binding SwitchToShoppingListCommand}"
+                        Content="Nákupní seznam" />
                 </StackPanel>
 
-                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="5" VerticalAlignment="Center">
-    
-    <Button Command="{Binding SwitchToProfileCommand}"
-            Background="Transparent" BorderThickness="0" Cursor="Hand"
-            ToolTip.Tip="Nastavení profilu">
-        <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
-            <TextBlock Text="{Binding UserProfileVM.Username}" 
-                       VerticalAlignment="Center" FontWeight="SemiBold" Foreground="#555"/>
-            <Border Width="40" Height="40" CornerRadius="20" Background="#E0E0E0">
-                <TextBlock Text="👤" FontSize="20" 
-                           HorizontalAlignment="Center" VerticalAlignment="Center"
-                           Margin="0,0,0,2"/>
-            </Border>
-        </StackPanel>
-    </Button>
+                <StackPanel
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal"
+                    Spacing="5">
 
-    <Border Width="1" Height="25" Background="#DDD" Margin="5,0"/>
+                    <Button
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding SwitchToProfileCommand}"
+                        Cursor="Hand"
+                        ToolTip.Tip="Nastavení profilu">
+                        <StackPanel
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal"
+                            Spacing="10">
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontWeight="SemiBold"
+                                Foreground="#555"
+                                Text="{Binding UserProfileVM.Username}" />
+                            <Border
+                                Width="40"
+                                Height="40"
+                                Background="#E0E0E0"
+                                CornerRadius="20">
+                                <TextBlock
+                                    Margin="0,0,0,2"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontSize="20"
+                                    Text="👤" />
+                            </Border>
+                        </StackPanel>
+                    </Button>
 
-    <Button Command="{Binding LogoutCommand}"
-            Background="Transparent" BorderThickness="0" Cursor="Hand"
-            ToolTip.Tip="Odhlásit se"
-            Padding="10">
-        <StackPanel Orientation="Horizontal" Spacing="5">
-            <TextBlock Text="🚪" FontSize="20" VerticalAlignment="Center"/>
-            </StackPanel>
+                    <Border
+                        Width="1"
+                        Height="25"
+                        Margin="5,0"
+                        Background="#DDD" />
 
-        <Button.Styles>
-            <Style Selector="Button:pointerover /template/ ContentPresenter">
-                <Setter Property="Background" Value="#FFEBEE"/> </Style>
-        </Button.Styles>
-    </Button>
+                    <Button
+                        Padding="10"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding LogoutCommand}"
+                        Cursor="Hand"
+                        ToolTip.Tip="Odhlásit se">
+                        <StackPanel Orientation="Horizontal" Spacing="5">
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontSize="20"
+                                Text="🚪" />
+                        </StackPanel>
 
-</StackPanel>
+                        <Button.Styles>
+                            <Style Selector="Button:pointerover /template/ ContentPresenter">
+                                <Setter Property="Background" Value="#FFEBEE" /> 
+                            </Style>
+                        </Button.Styles>
+                    </Button>
+
+                </StackPanel>
             </Grid>
 
-            <ContentControl Grid.Row="1" Content="{Binding CurrentPage}" Margin="0,10,0,0"/>
-            
+            <ContentControl
+                Grid.Row="1"
+                Margin="0,10,0,0"
+                Content="{Binding CurrentPage}" />
+
         </Grid>
 
         <Grid IsVisible="{Binding CalendarVM.IsPopupVisible, FallbackValue=False}">
-            
-            <Button Command="{Binding CalendarVM.ClosePopupCommand}"
-                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                    Background="#80000000">
+
+            <Button
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Background="#80000000"
+                Command="{Binding CalendarVM.ClosePopupCommand}">
                 <Button.Styles>
                     <Style Selector="Button:pointerover /template/ ContentPresenter">
-                        <Setter Property="Background" Value="#80000000"/>
+                        <Setter Property="Background" Value="#80000000" />
                     </Style>
                 </Button.Styles>
             </Button>
 
-            <Border Width="400" Height="500" Background="White" CornerRadius="10" 
-                    BoxShadow="0 0 20 0 #55000000"
-                    HorizontalAlignment="Center" VerticalAlignment="Center">
-                
+            <Border
+                Width="400"
+                Height="500"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="White"
+                BoxShadow="0 0 20 0 #55000000"
+                CornerRadius="10">
+
                 <Grid RowDefinitions="Auto, *">
-                    <Grid Grid.Row="0" Margin="15" ColumnDefinitions="*, Auto">
-                        <TextBlock Text="{Binding CalendarVM.SelectedDate, StringFormat='Plán pro {0:d.M.yyyy}'}" 
-                                   FontWeight="Bold" FontSize="18" VerticalAlignment="Center"/>
-                        <Button Grid.Column="1" Content="✕" 
-                                Command="{Binding CalendarVM.ClosePopupCommand}"
-                                Background="Transparent" Foreground="Gray" FontWeight="Bold"/>
+                    <Grid
+                        Grid.Row="0"
+                        Margin="15"
+                        ColumnDefinitions="*, Auto">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="18"
+                            FontWeight="Bold"
+                            Text="{Binding CalendarVM.SelectedDate, StringFormat='Plán pro {0:d.M.yyyy}'}" />
+                        <Button
+                            Grid.Column="1"
+                            Background="Transparent"
+                            Command="{Binding CalendarVM.ClosePopupCommand}"
+                            Content="✕"
+                            FontWeight="Bold"
+                            Foreground="Gray" />
                     </Grid>
 
-                    <Border Grid.Row="1" BorderBrush="#EEE" BorderThickness="0,1,0,0" Padding="20">
+                    <Border
+                        Grid.Row="1"
+                        Padding="20"
+                        BorderBrush="#EEE"
+                        BorderThickness="0,1,0,0">
                         <Grid RowDefinitions="Auto, *">
-                            <Grid Grid.Row="0" ColumnDefinitions="*, *, Auto" RowDefinitions="Auto, Auto" Margin="0,0,0,15">
-                                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,10,10">
-                                    <TextBlock Text="Typ jídla" FontSize="12" Foreground="Gray"/>
-                                    <ComboBox ItemsSource="{Binding CalendarVM.MealTypes}" 
-                                              SelectedItem="{Binding CalendarVM.FormType}" HorizontalAlignment="Stretch"/>
+                            <Grid
+                                Grid.Row="0"
+                                Margin="0,0,0,15"
+                                ColumnDefinitions="*, *, Auto"
+                                RowDefinitions="Auto, Auto">
+                                <StackPanel
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Margin="0,0,10,10">
+                                    <TextBlock
+                                        FontSize="12"
+                                        Foreground="Gray"
+                                        Text="Typ jídla" />
+                                    <ComboBox
+                                        HorizontalAlignment="Stretch"
+                                        ItemsSource="{Binding CalendarVM.MealTypes}"
+                                        SelectedItem="{Binding CalendarVM.FormType}" />
                                 </StackPanel>
 
-                                <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,10,10">
-                                    <TextBlock Text="Čas" FontSize="12" Foreground="Gray"/>
-                                    <TimePicker SelectedTime="{Binding CalendarVM.FormTime}" HorizontalAlignment="Stretch"/>
+                                <StackPanel
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Margin="0,0,10,10">
+                                    <TextBlock
+                                        FontSize="12"
+                                        Foreground="Gray"
+                                        Text="Čas" />
+                                    <TimePicker HorizontalAlignment="Stretch" SelectedTime="{Binding CalendarVM.FormTime}" />
                                 </StackPanel>
 
-                                <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,0,0,0">
-                                    <TextBlock Text="Recept" FontSize="12" Foreground="Gray"/>
+                                <StackPanel
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="3"
+                                    Margin="0,0,0,0">
+                                    <TextBlock
+                                        FontSize="12"
+                                        Foreground="Gray"
+                                        Text="Recept" />
                                     <Grid ColumnDefinitions="*, 10, Auto, 10, Auto">
-                                       <AutoCompleteBox Grid.Column="0"
-                                                 ItemsSource="{Binding CalendarVM.AvailableRecipes}"
-                                                 SelectedItem="{Binding CalendarVM.FormRecipe}"
-                                                 Text="{Binding CalendarVM.SearchText}"  FilterMode="Contains"
-                                                 ValueMemberBinding="{Binding Name}"
-                                                 Watermark="Hledat recept..."
-                                                 HorizontalAlignment="Stretch"/>
+                                        <AutoCompleteBox
+                                            Grid.Column="0"
+                                            HorizontalAlignment="Stretch"
+                                            FilterMode="Contains"
+                                            ItemsSource="{Binding CalendarVM.AvailableRecipes}"
+                                            SelectedItem="{Binding CalendarVM.FormRecipe}"
+                                            Text="{Binding CalendarVM.SearchText}"
+                                            ValueMemberBinding="{Binding Name}"
+                                            Watermark="Hledat recept..." />
 
-                                        <Button Grid.Column="2" 
-                                                Command="{Binding CalendarVM.CancelEditCommand}"
-                                                Background="#EEE" Foreground="Gray"
-                                                ToolTip.Tip="Vyčistit formulář / Zrušit úpravu">
+                                        <Button
+                                            Grid.Column="2"
+                                            Background="#EEE"
+                                            Command="{Binding CalendarVM.CancelEditCommand}"
+                                            Foreground="Gray"
+                                            ToolTip.Tip="Vyčistit formulář / Zrušit úpravu">
                                             <StackPanel Orientation="Horizontal" Spacing="5">
-                                                <TextBlock Text="✕" FontWeight="Bold"/>
-                                                <TextBlock Text="Zrušit" IsVisible="{Binding CalendarVM.IsEditing}"/>
+                                                <TextBlock FontWeight="Bold" Text="✕" />
+                                                <TextBlock IsVisible="{Binding CalendarVM.IsEditing}" Text="Zrušit" />
                                             </StackPanel>
                                         </Button>
 
-                                        <Button Grid.Column="4" 
-                                                Content="{Binding CalendarVM.SaveButtonText}"
-                                                Command="{Binding CalendarVM.SaveMealCommand}"
-                                                Background="#4CAF50" Foreground="White" FontWeight="Bold"/>
+                                        <Button
+                                            Grid.Column="4"
+                                            Background="#4CAF50"
+                                            Command="{Binding CalendarVM.SaveMealCommand}"
+                                            Content="{Binding CalendarVM.SaveButtonText}"
+                                            FontWeight="Bold"
+                                            Foreground="White" />
                                     </Grid>
                                 </StackPanel>
                             </Grid>
@@ -188,27 +298,51 @@
                                 <ItemsControl ItemsSource="{Binding CalendarVM.SelectedDayMeals}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <Border Background="#FAFAFA" BorderBrush="#EEE" BorderThickness="1" CornerRadius="5" Padding="10" Margin="0,0,0,8">
+                                            <Border
+                                                Margin="0,0,0,8"
+                                                Padding="10"
+                                                Background="#FAFAFA"
+                                                BorderBrush="#EEE"
+                                                BorderThickness="1"
+                                                CornerRadius="5">
                                                 <Grid ColumnDefinitions="Auto, *, Auto, Auto">
-                                                    <StackPanel Grid.Column="0" VerticalAlignment="Center" Width="60">
-                                                        <TextBlock Text="{Binding ScheduledFor, StringFormat='HH:mm'}" FontWeight="Bold"/>
-                                                        <TextBlock Text="{Binding MealType}" FontSize="11" Foreground="Gray"/>
+                                                    <StackPanel
+                                                        Grid.Column="0"
+                                                        Width="60"
+                                                        VerticalAlignment="Center">
+                                                        <TextBlock FontWeight="Bold" Text="{Binding ScheduledFor, StringFormat='HH:mm'}" />
+                                                        <TextBlock
+                                                            FontSize="11"
+                                                            Foreground="Gray"
+                                                            Text="{Binding MealType}" />
                                                     </StackPanel>
 
                                                     <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                                        <TextBlock Text="{Binding Recipe.Name}" FontWeight="SemiBold"/>
-                                                        <TextBlock Text="{Binding Recipe.TotalCalories, StringFormat='{}{0} kcal'}" FontSize="11" Foreground="Gray"/>
+                                                        <TextBlock FontWeight="SemiBold" Text="{Binding Recipe.Name}" />
+                                                        <TextBlock
+                                                            FontSize="11"
+                                                            Foreground="Gray"
+                                                            Text="{Binding Recipe.TotalCalories, StringFormat='{}{0} kcal'}" />
                                                     </StackPanel>
 
-                                                    <Button Grid.Column="2" Content="✏️" 
-                                                            Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).CalendarVM.EditMealCommand}"
-                                                            CommandParameter="{Binding}"
-                                                            Background="Transparent" BorderThickness="0" Padding="5"/>
+                                                    <Button
+                                                        Grid.Column="2"
+                                                        Padding="5"
+                                                        Background="Transparent"
+                                                        BorderThickness="0"
+                                                        Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).CalendarVM.EditMealCommand}"
+                                                        CommandParameter="{Binding}"
+                                                        Content="✏️" />
 
-                                                    <Button Grid.Column="3" Content="🗑️" 
-                                                            Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).CalendarVM.DeleteMealCommand}"
-                                                            CommandParameter="{Binding}"
-                                                            Background="Transparent" BorderThickness="0" Padding="5" Foreground="#D32F2F"/>
+                                                    <Button
+                                                        Grid.Column="3"
+                                                        Padding="5"
+                                                        Background="Transparent"
+                                                        BorderThickness="0"
+                                                        Command="{Binding $parent[Window].((vm:MainWindowViewModel)DataContext).CalendarVM.DeleteMealCommand}"
+                                                        CommandParameter="{Binding}"
+                                                        Content="🗑️"
+                                                        Foreground="#D32F2F" />
                                                 </Grid>
                                             </Border>
                                         </DataTemplate>

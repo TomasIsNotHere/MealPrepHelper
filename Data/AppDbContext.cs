@@ -16,7 +16,6 @@ namespace MealPrepHelper.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // Název výsledného souboru
             optionsBuilder.UseSqlite("Data Source=mealprep.db");
         }
     }

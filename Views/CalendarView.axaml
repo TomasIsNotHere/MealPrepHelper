@@ -1,89 +1,83 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="using:MealPrepHelper.ViewModels"
-             x:Class="MealPrepHelper.Views.CalendarView"
-             x:DataType="vm:CalendarViewModel">
+<UserControl
+    x:Class="MealPrepHelper.Views.CalendarView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:MealPrepHelper.ViewModels"
+    x:DataType="vm:CalendarViewModel">
 
     <UserControl.Styles>
-    <Style Selector="Border.DayCell">
-        <Setter Property="MinHeight" Value="85"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="#EEEEEE"/>
-        <Setter Property="CornerRadius" Value="4"/>
-        <Setter Property="Transitions">
-            <Transitions>
-                <BrushTransition Property="Background" Duration="0:0:0.2"/>
-            </Transitions>
-        </Setter>
-    </Style>
+        <Style Selector="Border.DayCell">
+            <Setter Property="MinHeight" Value="85" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="#EEEEEE" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.2" />
+                </Transitions>
+            </Setter>
+        </Style>
 
-    <Style Selector="Border.DayCell.today">
-        <Setter Property="Background" Value="#E3F2FD"/>
-        <Setter Property="BorderBrush" Value="#2196F3"/>
-        <Setter Property="BorderThickness" Value="2"/>
-    </Style>
+        <Style Selector="Border.DayCell.today">
+            <Setter Property="Background" Value="#E3F2FD" />
+            <Setter Property="BorderBrush" Value="#2196F3" />
+            <Setter Property="BorderThickness" Value="2" />
+        </Style>
 
-    <Style Selector="Border.DayCell.today TextBlock">
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Foreground" Value="#1565C0"/>
-    </Style>
-</UserControl.Styles>
-
+        <Style Selector="Border.DayCell.today TextBlock">
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="#1565C0" />
+        </Style>
+    </UserControl.Styles>
 
     <Grid RowDefinitions="Auto, Auto, *">
-        
-        <Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto" Margin="20,20,20,10">
-            <Button Grid.Column="0" Content="&lt;" Command="{Binding PrevMonthCommand}" Width="40"/>
-            <TextBlock Grid.Column="1" Text="{Binding MonthTitle}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold"/>
-            <Button Grid.Column="2" Content="&gt;" Command="{Binding NextMonthCommand}" Width="40"/>
+        <Grid
+            Grid.Row="0"
+            Margin="20,20,20,10"
+            ColumnDefinitions="Auto, *, Auto">
+            <Button Grid.Column="0" Width="40" Command="{Binding PrevMonthCommand}" Content="&lt;" />
+            <TextBlock Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" FontWeight="Bold" Text="{Binding MonthTitle}" />
+            <Button Grid.Column="2" Width="40" Command="{Binding NextMonthCommand}" Content="&gt;" />
         </Grid>
-
-        <UniformGrid Grid.Row="1" Columns="7" Margin="10,0">
-            <TextBlock Text="Po" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Margin="0,0,0,10"/>
-            <TextBlock Text="Út" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Margin="0,0,0,10"/>
-            <TextBlock Text="St" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Margin="0,0,0,10"/>
-            <TextBlock Text="Čt" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Margin="0,0,0,10"/>
-            <TextBlock Text="Pá" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Margin="0,0,0,10"/>
-            <TextBlock Text="So" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Margin="0,0,0,10"/>
-            <TextBlock Text="Ne" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Margin="0,0,0,10"/>
+        <UniformGrid Grid.Row="1" Margin="10,0" Columns="7">
+            <TextBlock Margin="0,0,0,10" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Text="Po" />
+            <TextBlock Margin="0,0,0,10" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Text="Út" />
+            <TextBlock Margin="0,0,0,10" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Text="St" />
+            <TextBlock Margin="0,0,0,10" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Text="Čt" />
+            <TextBlock Margin="0,0,0,10" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Text="Pá" />
+            <TextBlock Margin="0,0,0,10" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Text="So" />
+            <TextBlock Margin="0,0,0,10" HorizontalAlignment="Center" FontWeight="Bold" Foreground="Gray" Text="Ne" />
         </UniformGrid>
-
-        <ItemsControl Grid.Row="2" ItemsSource="{Binding Days}" Margin="10,0">
+        <ItemsControl Grid.Row="2" Margin="10,0" ItemsSource="{Binding Days}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Columns="7"/>
+                    <UniformGrid Columns="7" />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
-            
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Command="{Binding $parent[UserControl].((vm:CalendarViewModel)DataContext).OpenPopupCommand}"
-                            CommandParameter="{Binding}"
-                            Background="Transparent" 
-                            BorderThickness="0"
-                            Padding="2" 
-                            HorizontalAlignment="Stretch" 
-                            VerticalAlignment="Stretch"
-                            HorizontalContentAlignment="Stretch"
-                            VerticalContentAlignment="Stretch">
-                        
-                        <Border Classes="DayCell"
-                                Classes.today="{Binding IsToday}">
-                            
+                    <Button
+                        Padding="2"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        HorizontalContentAlignment="Stretch"
+                        VerticalContentAlignment="Stretch"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Command="{Binding $parent[UserControl].((vm:CalendarViewModel)DataContext).OpenPopupCommand}"
+                        CommandParameter="{Binding}">
+                        <Border Classes="DayCell" Classes.today="{Binding IsToday}">
                             <Grid>
-                                <TextBlock Text="{Binding DayNumber}" 
-                                           HorizontalAlignment="Center" 
-                                           VerticalAlignment="Center" 
-                                           Foreground="{Binding TextColor}" 
-                                           FontSize="16"/>
-                                
-                                <Ellipse Width="6" Height="6" 
-                                         Fill="{Binding DotColor}" 
-                                         HorizontalAlignment="Center" 
-                                         VerticalAlignment="Bottom" 
-                                         Margin="0,0,0,8" 
-                                         IsVisible="{Binding HasPlan}"/>
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Foreground="{Binding TextColor}" Text="{Binding DayNumber}" />
+                                <Ellipse
+                                    Width="6"
+                                    Height="6"
+                                    Margin="0,0,0,8"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Bottom"
+                                    Fill="{Binding DotColor}"
+                                    IsVisible="{Binding HasPlan}" />
                             </Grid>
                         </Border>
                     </Button>

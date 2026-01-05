@@ -1,98 +1,66 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="using:MealPrepHelper.ViewModels"
-             x:Class="MealPrepHelper.Views.LoginView"
-             x:DataType="vm:LoginViewModel"
-             Background="White">
+<UserControl
+    x:Class="MealPrepHelper.Views.LoginView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:MealPrepHelper.ViewModels"
+    x:DataType="vm:LoginViewModel"
+    Background="White">
 
     <Grid>
-        <Border Background="#F5F5F5"/>
-
+        <Border Background="#F5F5F5" />
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <Border Width="400" VerticalAlignment="Center" HorizontalAlignment="Center"
-                    Background="White" CornerRadius="10" Padding="30" Margin="20"
-                    BoxShadow="0 4 20 0 #20000000">
-
+            <Border Width="400" Margin="20" Padding="30" HorizontalAlignment="Center" VerticalAlignment="Center" Background="White" BoxShadow="0 4 20 0 #20000000" CornerRadius="10">
                 <StackPanel Spacing="15">
-
-                    <TextBlock Text="{Binding TitleText}" 
-                               FontSize="24" FontWeight="Bold" 
-                               HorizontalAlignment="Center" Foreground="#333" Margin="0,0,0,10"/>
-
+                    <TextBlock Margin="0,0,0,10" HorizontalAlignment="Center" FontWeight="Bold" Foreground="#333" Text="{Binding TitleText}" />
                     <StackPanel Spacing="10">
                         <StackPanel>
-                            <TextBlock Text="Uživatelské jméno" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
-                            <TextBox Text="{Binding Username}" Watermark="Váš login"/>
+                            <TextBlock Margin="0,0,0,5" FontSize="12" Foreground="Gray" Text="Uživatelské jméno" />
+                            <TextBox Text="{Binding Username}" Watermark="Váš login" />
                         </StackPanel>
-
                         <StackPanel>
-                            <TextBlock Text="Heslo" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
-                            <TextBox Text="{Binding Password}" PasswordChar="•" Watermark="Vaše heslo"/>
+                            <TextBlock Margin="0,0,0,5" FontSize="12" Foreground="Gray" Text="Heslo" />
+                            <TextBox PasswordChar="•" Text="{Binding Password}" Watermark="Vaše heslo" />
                         </StackPanel>
-
                         <StackPanel IsVisible="{Binding IsRegistering}">
-                            <TextBlock Text="Potvrzení hesla" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
-                            <TextBox Text="{Binding ConfirmPassword}" PasswordChar="•" Watermark="Zadejte heslo znovu"/>
+                            <TextBlock Margin="0,0,0,5" FontSize="12" Foreground="Gray" Text="Potvrzení hesla" />
+                            <TextBox PasswordChar="•" Text="{Binding ConfirmPassword}" Watermark="Zadejte heslo znovu" />
                         </StackPanel>
                     </StackPanel>
-
                     <StackPanel IsVisible="{Binding IsRegistering}" Spacing="10">
-                        
-                        <Separator Background="#EEE" Margin="0,5"/>
-                        <TextBlock Text="Údaje pro výpočet jídelníčku" FontWeight="SemiBold" Foreground="#555"/>
-
+                        <Separator Margin="0,5" Background="#EEE" />
+                        <TextBlock FontWeight="SemiBold" Foreground="#555" Text="Údaje pro výpočet jídelníčku" />
                         <Grid ColumnDefinitions="*, 15, *">
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="Věk" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
-                                <NumericUpDown Value="{Binding RegAge}" Minimum="10" Maximum="100" FormatString="0"/>
+                                <TextBlock Margin="0,0,0,5" FontSize="12" Foreground="Gray" Text="Věk" />
+                                <NumericUpDown FormatString="0" Maximum="100" Minimum="10" Value="{Binding RegAge}" />
                             </StackPanel>
-
                             <StackPanel Grid.Column="2">
-                                <TextBlock Text="Pohlaví" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
-                                <ComboBox ItemsSource="{Binding Genders}" 
-                                          SelectedItem="{Binding SelectedGender}" 
-                                          HorizontalAlignment="Stretch"/>
+                                <TextBlock Margin="0,0,0,5" FontSize="12" Foreground="Gray" Text="Pohlaví" />
+                                <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding Genders}" SelectedItem="{Binding SelectedGender}" />
                             </StackPanel>
                         </Grid>
-
                         <Grid ColumnDefinitions="*, 15, *">
                             <StackPanel Grid.Column="0">
-                                <TextBlock Text="Výška (cm)" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
-                                <NumericUpDown Value="{Binding RegHeight}" Minimum="100" Maximum="250" FormatString="0"/>
+                                <TextBlock Margin="0,0,0,5" FontSize="12" Foreground="Gray" Text="Výška (cm)" />
+                                <NumericUpDown FormatString="0" Maximum="250" Minimum="100" Value="{Binding RegHeight}" />
                             </StackPanel>
-
                             <StackPanel Grid.Column="2">
-                                <TextBlock Text="Váha (kg)" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
-                                <NumericUpDown Value="{Binding RegWeight}" Minimum="30" Maximum="250" FormatString="0"/>
+                                <TextBlock Margin="0,0,0,5" FontSize="12" Foreground="Gray" Text="Váha (kg)" />
+                                <NumericUpDown FormatString="0" Maximum="250" Minimum="30" Value="{Binding RegWeight}" />
                             </StackPanel>
                         </Grid>
-
                         <StackPanel>
-                            <TextBlock Text="Fyzická aktivita" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
-                            <ComboBox ItemsSource="{Binding ActivityLevels}" 
-                                      SelectedItem="{Binding SelectedActivity}" 
-                                      HorizontalAlignment="Stretch"/>
+                            <TextBlock Margin="0,0,0,5" FontSize="12" Foreground="Gray" Text="Fyzická aktivita" />
+                            <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding ActivityLevels}" SelectedItem="{Binding SelectedActivity}" />
+                        </StackPanel>
+                        <StackPanel Margin="0,10,0,0">
+                            <TextBlock Margin="0,5,0,2" FontWeight="Bold" Text="Můj cíl" />
+                            <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding AvailableGoals}" SelectedItem="{Binding SelectedGoal}" />
                         </StackPanel>
                     </StackPanel>
-
-                    <TextBlock Text="{Binding ErrorMessage}" 
-                               Foreground="#D32F2F" FontSize="12" TextWrapping="Wrap"
-                               HorizontalAlignment="Center" 
-                               IsVisible="{Binding !!ErrorMessage.Length}"
-                               Margin="0,10,0,0"/>
-
-                    <Button Command="{Binding MainActionCommand}" 
-                            Content="{Binding MainButtonText}"
-                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
-                            Background="#2196F3" Foreground="White" FontWeight="Bold" Padding="12"
-                            CornerRadius="5" Margin="0,10,0,0"/>
-
-                    <Button Command="{Binding SwitchModeCommand}"
-                            Content="{Binding SwitchModeText}"
-                            HorizontalAlignment="Center"
-                            Background="Transparent" Foreground="#2196F3" 
-                            FontSize="12" Cursor="Hand" BorderThickness="0"/>
-
+                    <TextBlock Margin="0,10,0,0" HorizontalAlignment="Center" FontSize="12" Foreground="#D32F2F" IsVisible="{Binding !!ErrorMessage.Length}" Text="{Binding ErrorMessage}" TextWrapping="Wrap" />
+                    <Button Margin="0,10,0,0" Padding="12" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="#2196F3" Command="{Binding MainActionCommand}" Content="{Binding MainButtonText}" CornerRadius="5" FontWeight="Bold" Foreground="White" />
+                    <Button HorizontalAlignment="Center" Background="Transparent" BorderThickness="0" Command="{Binding SwitchModeCommand}" Content="{Binding SwitchModeText}" Cursor="Hand" FontSize="12" Foreground="#2196F3" />
                 </StackPanel>
             </Border>
         </ScrollViewer>

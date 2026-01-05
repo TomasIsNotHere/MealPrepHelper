@@ -1,42 +1,70 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="using:MealPrepHelper.ViewModels"
-             x:Class="MealPrepHelper.Views.PantryView"
-             x:DataType="vm:PantryViewModel">
-    
+<UserControl
+    x:Class="MealPrepHelper.Views.PantryView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:MealPrepHelper.ViewModels"
+    x:DataType="vm:PantryViewModel">
+
     <Grid RowDefinitions="Auto, *">
-        
-        <Border Grid.Row="0" Background="White" Margin="20" Padding="20" CornerRadius="10" BoxShadow="0 2 10 0 #10000000">
+
+        <Border
+            Grid.Row="0"
+            Margin="20"
+            Padding="20"
+            Background="White"
+            BoxShadow="0 2 10 0 #10000000"
+            CornerRadius="10">
             <StackPanel Spacing="15">
-                <TextBlock Text="🛒 Přidat do spižírny" FontSize="18" FontWeight="Bold"/>
-                
+                <TextBlock
+                    FontSize="18"
+                    FontWeight="Bold"
+                    Text="🛒 Přidat do spižírny" />
+
                 <Grid ColumnDefinitions="2*, 1*, Auto, Auto" RowDefinitions="Auto, Auto">
-                    
+
                     <StackPanel Grid.Column="0" Margin="0,0,10,0">
-                        <TextBlock Text="Surovina" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
-                        
-                        <AutoCompleteBox ItemsSource="{Binding AllIngredients}" 
-                                         SelectedItem="{Binding SelectedIngredient}"
-                                         ValueMemberBinding="{Binding Name}"
-                                         FilterMode="Contains"
-                                         Watermark="Začněte psát název..."
-                                         HorizontalAlignment="Stretch"/>
+                        <TextBlock
+                            Margin="0,0,0,5"
+                            FontSize="12"
+                            Foreground="Gray"
+                            Text="Surovina" />
+
+                        <AutoCompleteBox
+                            HorizontalAlignment="Stretch"
+                            FilterMode="Contains"
+                            ItemsSource="{Binding AllIngredients}"
+                            SelectedItem="{Binding SelectedIngredient}"
+                            ValueMemberBinding="{Binding Name}"
+                            Watermark="Začněte psát název..." />
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Margin="0,0,10,0">
-                        <TextBlock Text="Množství" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
-                        <NumericUpDown Value="{Binding AddAmount}" Minimum="0" Increment="10"/>
+                        <TextBlock
+                            Margin="0,0,0,5"
+                            FontSize="12"
+                            Foreground="Gray"
+                            Text="Množství" />
+                        <NumericUpDown
+                            Increment="10"
+                            Minimum="0"
+                            Value="{Binding AddAmount}" />
                     </StackPanel>
 
-                    <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="0,18,10,0">
-                        <TextBlock Text="{Binding AddUnit}" FontWeight="Bold"/>
+                    <StackPanel
+                        Grid.Column="2"
+                        Margin="0,18,10,0"
+                        VerticalAlignment="Center">
+                        <TextBlock FontWeight="Bold" Text="{Binding AddUnit}" />
                     </StackPanel>
 
-                    <Button Grid.Column="3" 
-                            Command="{Binding AddCommand}"
-                            Content="Přidat" 
-                            VerticalAlignment="Bottom"
-                            Background="#4CAF50" Foreground="White" FontWeight="Bold"/>
+                    <Button
+                        Grid.Column="3"
+                        VerticalAlignment="Bottom"
+                        Background="#4CAF50"
+                        Command="{Binding AddCommand}"
+                        Content="Přidat"
+                        FontWeight="Bold"
+                        Foreground="White" />
                 </Grid>
             </StackPanel>
         </Border>
@@ -45,42 +73,62 @@
             <ItemsControl ItemsSource="{Binding PantryItems}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Background="White" CornerRadius="8" Padding="15" Margin="0,0,0,10" BoxShadow="0 1 3 0 #20000000">
+                        <Border
+                            Margin="0,0,0,10"
+                            Padding="15"
+                            Background="White"
+                            BoxShadow="0 1 3 0 #20000000"
+                            CornerRadius="8">
                             <Grid ColumnDefinitions="*, Auto, Auto, Auto">
-                                
+
                                 <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" FontSize="16"/>
+                                    <TextBlock
+                                        FontSize="16"
+                                        FontWeight="SemiBold"
+                                        Text="{Binding Name}" />
                                     <StackPanel Orientation="Horizontal" Spacing="5">
-                                        <TextBlock Text="Skladem:" Foreground="Gray"/>
-                                        <TextBlock Text="{Binding CurrentAmount}" FontWeight="Bold"/>
-                                        <TextBlock Text="{Binding Unit}" FontWeight="Bold"/>
+                                        <TextBlock Foreground="Gray" Text="Skladem:" />
+                                        <TextBlock FontWeight="Bold" Text="{Binding CurrentAmount}" />
+                                        <TextBlock FontWeight="Bold" Text="{Binding Unit}" />
                                     </StackPanel>
                                 </StackPanel>
 
-                               <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10,0">
-    <TextBlock Text="Odebrat:" FontSize="10" Foreground="Gray"/>
-    
-    <StackPanel Orientation="Horizontal" Spacing="10">
-        
-        <NumericUpDown Value="{Binding AmountToRemove}" 
-                       Maximum="{Binding CurrentAmount}"
-                       Minimum="0"
-                       Width="130" 
-                       IsEnabled="{Binding !RemoveAll}"/>
+                                <StackPanel
+                                    Grid.Column="1"
+                                    Margin="10,0"
+                                    VerticalAlignment="Center">
+                                    <TextBlock
+                                        FontSize="10"
+                                        Foreground="Gray"
+                                        Text="Odebrat:" />
 
-        <CheckBox IsChecked="{Binding RemoveAll}" 
-                  Content="Vše" 
-                  Padding="4,0,0,0"
-                  VerticalAlignment="Center"/>
-    </StackPanel>
-</StackPanel>
+                                    <StackPanel Orientation="Horizontal" Spacing="10">
 
-                                <Button Grid.Column="2" 
-                                        Command="{Binding $parent[UserControl].((vm:PantryViewModel)DataContext).RemoveCommand}"
-                                        CommandParameter="{Binding}"
-                                        Background="#FFEBEE" Foreground="#D32F2F"
-                                        Margin="10,0,0,0" VerticalAlignment="Bottom" Height="32">
-                                    <TextBlock Text="Smazat"/>
+                                        <NumericUpDown
+                                            Width="130"
+                                            IsEnabled="{Binding !RemoveAll}"
+                                            Maximum="{Binding CurrentAmount}"
+                                            Minimum="0"
+                                            Value="{Binding AmountToRemove}" />
+
+                                        <CheckBox
+                                            Padding="4,0,0,0"
+                                            VerticalAlignment="Center"
+                                            Content="Vše"
+                                            IsChecked="{Binding RemoveAll}" />
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <Button
+                                    Grid.Column="2"
+                                    Height="32"
+                                    Margin="10,0,0,0"
+                                    VerticalAlignment="Bottom"
+                                    Background="#FFEBEE"
+                                    Command="{Binding $parent[UserControl].((vm:PantryViewModel)DataContext).RemoveCommand}"
+                                    CommandParameter="{Binding}"
+                                    Foreground="#D32F2F">
+                                    <TextBlock Text="Smazat" />
                                 </Button>
                             </Grid>
                         </Border>
