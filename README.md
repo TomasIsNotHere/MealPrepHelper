@@ -79,8 +79,7 @@ The project follows a strict MVVM structure:
 ---
 
 ## 🔑 Demo Credentials
-
-The application creates a demo user upon the first launch:
+Use demo credentials to try out MealPrepHelper or create your profile.
 
 * **Login:** `Admin`
 * **Password:** `admin123`
