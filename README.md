@@ -50,7 +50,7 @@
 ### Steps
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/your-username/MealPrepHelper.git](https://github.com/your-username/MealPrepHelper.git)
+    git clone https://github.com/TomasIsNotHere/MealPrepHelper.git
     cd MealPrepHelper
     ```
 
@@ -64,8 +64,6 @@
     dotnet run
     ```
 
-> **Note regarding the database:** Upon the first launch, the application automatically creates the `mealprep.db` file and seeds it with test data (recipes, ingredients, admin account) via the `DbInitializer` class.
-
 ---
 
 ## 🗂 Project Structure
@@ -73,7 +71,7 @@
 The project follows a strict MVVM structure:
 
 * 📂 **Models:** Database entities (`User`, `Recipe`, `Ingredient`, `PantryItem`...).
-* 📂 **ViewModels:** Application logic, DB connection, ReactiveCommands (`OverviewViewModel`, `CalendarViewModel`...).
+* 📂 **ViewModels:** Application logic, ReactiveCommands (`OverviewViewModel`, `CalendarViewModel`...).
 * 📂 **Views:** XAML files defining the UI (`UserControl`, `Window`).
 * 📂 **Data:** Database context (`AppDbContext`) and initializer (`DbInitializer`).
 * 📂 **Services:** Helper classes (`NutritionCalculator`, `PasswordHelper`).
@@ -89,21 +87,8 @@ The application creates a demo user upon the first launch:
 
 ---
 
-## 🆘 Troubleshooting
-
-**Error: "SQLite Error 1: 'no such column'..."**
-If you have modified the data model (e.g., added a new property to `User`), the database schema might be outdated.
-* **Solution:** Delete the `mealprep.db` file in the project folder and restart the application. A new DB with the current structure will be created.
-
----
-
 ## 📝 Roadmap (To-Do)
 
 * [ ] Recipe Editor (allow users to create custom recipes).
 * [ ] Export Shopping List to PDF/Text.
 * [ ] Weight history and progress charts.
-
----
-
-**Author:** Your Team
-**License:** MIT
