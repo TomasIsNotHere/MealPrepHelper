@@ -290,7 +290,7 @@ namespace MealPrepHelper.ViewModels
         }
     }
 
-    // helper viewmodel for calendar days
+    // helper view model for calendar days
     public class CalendarDayViewModel : ViewModelBase
     {
         public DateTime Date { get; set; }

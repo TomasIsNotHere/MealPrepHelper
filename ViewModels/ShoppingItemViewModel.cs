@@ -13,7 +13,6 @@ namespace MealPrepHelper.ViewModels
         public string Unit => Model.Unit;
 
         // editable properties
-
         public double? Amount
         {
             get => Model.Amount;

@@ -1,4 +1,4 @@
-using MealPrepHelper.Models; // Upravte dle vašeho namespace
+using MealPrepHelper.Models;
 namespace MealPrepHelper.Services{
 
 public static class NutritionCalculator
@@ -45,7 +45,6 @@ public static class NutritionCalculator
             user.Protein = (int)((targetCalories * 0.30) / 4);
             user.Carbs = (int)((targetCalories * 0.35) / 4);
             user.Fat = (int)((targetCalories * 0.35) / 9);
-            
             user.DietaryFiber = (int)((targetCalories / 1000.0) * 14);
         }
 

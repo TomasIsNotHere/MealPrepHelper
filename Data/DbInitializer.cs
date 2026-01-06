@@ -186,7 +186,7 @@ namespace MealPrepHelper.Data
             };
             CalculateRecipeNutrition(bakedPasta);
             recipes.Add(bakedPasta);
-            
+
             context.Recipes.AddRange(recipes);
             context.SaveChanges();
 
@@ -210,26 +210,26 @@ namespace MealPrepHelper.Data
                 Name = "Startovací týden",
                 Items = new List<PlanItem>
                 {
-                    new PlanItem 
-                    { 
+                    new PlanItem
+                    {
                         Recipe = eggs,
-                        ScheduledFor = DateTime.Now.Date.AddHours(8), 
+                        ScheduledFor = DateTime.Now.Date.AddHours(8),
                         MealType = "Snídaně",
-                        IsEaten = false 
+                        IsEaten = false
                     },
-                    new PlanItem 
-                    { 
-                        Recipe = chickenRice, 
+                    new PlanItem
+                    {
+                        Recipe = chickenRice,
                         ScheduledFor = DateTime.Now.Date.AddHours(12),
                         MealType = "Oběd",
-                        IsEaten = false 
+                        IsEaten = false
                     },
-                    new PlanItem 
-                    { 
-                        Recipe = pastaTomato, 
+                    new PlanItem
+                    {
+                        Recipe = pastaTomato,
                         ScheduledFor = DateTime.Now.Date.AddHours(18),
                         MealType = "Večeře",
-                        IsEaten = false 
+                        IsEaten = false
                     }
                 }
             };
